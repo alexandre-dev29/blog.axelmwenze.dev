@@ -2,10 +2,35 @@ overwrite: true
 schema: "http://localhost:1337/graphql"
 documents: "graphql/Schemas/**/*.graphql"
 generates:
-  libs/data/src/generated/graphqlTypes.ts:
+  libs/data/src/generated/graphqlTypes.tsx:
     plugins:
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
     config:
+      reactApolloVersion: 3
+      withHooks: false
+      withHOC: false
+      withComponent: false
+      exportFragmentSpreadSubTypes: true
+      documentMode: graphQLTag
+  libs/data/src/generated/graphqlPages.tsx:
+    config:
+      documentMode: external
+      importDocumentNodeExternallyFrom: ./graphqlTypes
+      reactApolloVersion: 3
       withHooks: true
+      contextType: "ApolloClientContext"
+      contextTypeRequired: true
+      # withHOC: false
+      # excludePatterns: 'getComments'
+      # excludePatternsOptions: 'i'
+      # customDataIdFromObjectName: 'test'
+      # customDataIdFromObjectImport: 'abc'
+      apolloClientInstanceImport: "@next-template-nx/utils"
+      # apolloStateKey: '__APOLLO_STATE__'
+    preset: import-types
+    presetConfig:
+      typesPath: ./graphqlTypes
+    plugins:
+      - "graphql-codegen-apollo-next-ssr" # replace by - graphql-codegen-apollo-next-ssr

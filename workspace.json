@@ -4,9 +4,7 @@
   "projects": {
     "data": "libs/data",
     "front": "apps/front",
-    "front-e2e": "apps/front-e2e",
     "ui": "libs/ui",
-    "ui-e2e": "apps/ui-e2e",
     "utils": "libs/utils"
   }
 }

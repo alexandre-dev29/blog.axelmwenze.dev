@@ -1,4 +1,3 @@
-import styles from './error-popup.module.scss';
 import { ErrorTypeGraphQl } from '@next-template-nx/data';
 import { Col, Modal, Row, Text } from '@nextui-org/react';
 import DefaultButton from '../default-button/default-button';
@@ -12,6 +11,7 @@ export interface ErrorPopupProps {
 }
 
 export function ErrorPopup(props: ErrorPopupProps) {
+  console.log(props);
   return (
     <div>
       <Modal

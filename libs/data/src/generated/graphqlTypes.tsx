@@ -1,11 +1,17 @@
-import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+import { gql } from '@apollo/client';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions = {} as const;
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -202,21 +208,20 @@ export type DateTimeFilterInput = {
   startsWith?: InputMaybe<Scalars['DateTime']>;
 };
 
-export enum Enum_Work_Tags {
-  Backend = 'Backend',
-  Frontend = 'Frontend',
-  Fullstack = 'Fullstack',
-  Mobile = 'Mobile',
-  Other = 'Other'
-}
-
 export type Experience = {
   __typename?: 'Experience';
   Year: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateTime']>;
   publishedAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-  work_experience?: Maybe<WorkExperienceEntityResponse>;
+  work_experiences?: Maybe<WorkExperienceRelationResponseCollection>;
+};
+
+export type ExperienceWork_ExperiencesArgs = {
+  filters?: InputMaybe<WorkExperienceFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type ExperienceEntity = {
@@ -245,18 +250,13 @@ export type ExperienceFiltersInput = {
   or?: InputMaybe<Array<InputMaybe<ExperienceFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
-  work_experience?: InputMaybe<WorkExperienceFiltersInput>;
+  work_experiences?: InputMaybe<WorkExperienceFiltersInput>;
 };
 
 export type ExperienceInput = {
   Year?: InputMaybe<Scalars['Int']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
-  work_experience?: InputMaybe<Scalars['ID']>;
-};
-
-export type ExperienceRelationResponseCollection = {
-  __typename?: 'ExperienceRelationResponseCollection';
-  data: Array<ExperienceEntity>;
+  work_experiences?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 export type FileInfoInput = {
@@ -289,7 +289,23 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = About | Brand | Contact | Experience | I18NLocale | Skill | Testimonial | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Work | WorkExperience;
+export type GenericMorph =
+  | About
+  | Brand
+  | Contact
+  | Experience
+  | I18NLocale
+  | Skill
+  | Tag
+  | Testcontent
+  | Testimonial
+  | UploadFile
+  | UploadFolder
+  | UsersPermissionsPermission
+  | UsersPermissionsRole
+  | UsersPermissionsUser
+  | Work
+  | WorkExperience;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -406,6 +422,8 @@ export type Mutation = {
   createContact?: Maybe<ContactEntityResponse>;
   createExperience?: Maybe<ExperienceEntityResponse>;
   createSkill?: Maybe<SkillEntityResponse>;
+  createTag?: Maybe<TagEntityResponse>;
+  createTestcontent?: Maybe<TestcontentEntityResponse>;
   createTestimonial?: Maybe<TestimonialEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -420,6 +438,8 @@ export type Mutation = {
   deleteContact?: Maybe<ContactEntityResponse>;
   deleteExperience?: Maybe<ExperienceEntityResponse>;
   deleteSkill?: Maybe<SkillEntityResponse>;
+  deleteTag?: Maybe<TagEntityResponse>;
+  deleteTestcontent?: Maybe<TestcontentEntityResponse>;
   deleteTestimonial?: Maybe<TestimonialEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -446,6 +466,8 @@ export type Mutation = {
   updateExperience?: Maybe<ExperienceEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updateSkill?: Maybe<SkillEntityResponse>;
+  updateTag?: Maybe<TagEntityResponse>;
+  updateTestcontent?: Maybe<TestcontentEntityResponse>;
   updateTestimonial?: Maybe<TestimonialEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -458,141 +480,129 @@ export type Mutation = {
   upload: UploadFileEntityResponse;
 };
 
-
 export type MutationCreateAboutArgs = {
   data: AboutInput;
 };
-
 
 export type MutationCreateBrandArgs = {
   data: BrandInput;
 };
 
-
 export type MutationCreateContactArgs = {
   data: ContactInput;
 };
-
 
 export type MutationCreateExperienceArgs = {
   data: ExperienceInput;
 };
 
-
 export type MutationCreateSkillArgs = {
   data: SkillInput;
 };
 
+export type MutationCreateTagArgs = {
+  data: TagInput;
+};
+
+export type MutationCreateTestcontentArgs = {
+  data: TestcontentInput;
+};
 
 export type MutationCreateTestimonialArgs = {
   data: TestimonialInput;
 };
 
-
 export type MutationCreateUploadFileArgs = {
   data: UploadFileInput;
 };
-
 
 export type MutationCreateUploadFolderArgs = {
   data: UploadFolderInput;
 };
 
-
 export type MutationCreateUsersPermissionsRoleArgs = {
   data: UsersPermissionsRoleInput;
 };
-
 
 export type MutationCreateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
 };
 
-
 export type MutationCreateWorkArgs = {
   data: WorkInput;
 };
-
 
 export type MutationCreateWorkExperienceArgs = {
   data: WorkExperienceInput;
 };
 
-
 export type MutationDeleteAboutArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteBrandArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteContactArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteExperienceArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteSkillArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationDeleteTagArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteTestcontentArgs = {
+  id: Scalars['ID'];
+};
 
 export type MutationDeleteTestimonialArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteUploadFileArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteUploadFolderArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteUsersPermissionsRoleArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteUsersPermissionsUserArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteWorkArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteWorkExperienceArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationEmailConfirmationArgs = {
   confirmation: Scalars['String'];
 };
-
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
 };
 
-
 export type MutationLoginArgs = {
   input: UsersPermissionsLoginInput;
 };
-
 
 export type MutationMultipleUploadArgs = {
   field?: InputMaybe<Scalars['String']>;
@@ -601,16 +611,13 @@ export type MutationMultipleUploadArgs = {
   refId?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type MutationRegisterArgs = {
   input: UsersPermissionsRegisterInput;
 };
 
-
 export type MutationRemoveFileArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationResetPasswordArgs = {
   code: Scalars['String'];
@@ -618,84 +625,80 @@ export type MutationResetPasswordArgs = {
   passwordConfirmation: Scalars['String'];
 };
 
-
 export type MutationUpdateAboutArgs = {
   data: AboutInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateBrandArgs = {
   data: BrandInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateContactArgs = {
   data: ContactInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateExperienceArgs = {
   data: ExperienceInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateFileInfoArgs = {
   id: Scalars['ID'];
   info?: InputMaybe<FileInfoInput>;
 };
-
 
 export type MutationUpdateSkillArgs = {
   data: SkillInput;
   id: Scalars['ID'];
 };
 
+export type MutationUpdateTagArgs = {
+  data: TagInput;
+  id: Scalars['ID'];
+};
+
+export type MutationUpdateTestcontentArgs = {
+  data: TestcontentInput;
+  id: Scalars['ID'];
+};
 
 export type MutationUpdateTestimonialArgs = {
   data: TestimonialInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateUploadFileArgs = {
   data: UploadFileInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateUploadFolderArgs = {
   data: UploadFolderInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateUsersPermissionsRoleArgs = {
   data: UsersPermissionsRoleInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateWorkArgs = {
   data: WorkInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateWorkExperienceArgs = {
   data: WorkExperienceInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUploadArgs = {
   field?: InputMaybe<Scalars['String']>;
@@ -722,7 +725,7 @@ export type PaginationArg = {
 
 export enum PublicationState {
   Live = 'LIVE',
-  Preview = 'PREVIEW'
+  Preview = 'PREVIEW',
 }
 
 export type Query = {
@@ -740,6 +743,10 @@ export type Query = {
   me?: Maybe<UsersPermissionsMe>;
   skill?: Maybe<SkillEntityResponse>;
   skills?: Maybe<SkillEntityResponseCollection>;
+  tag?: Maybe<TagEntityResponse>;
+  tags?: Maybe<TagEntityResponseCollection>;
+  testcontent?: Maybe<TestcontentEntityResponse>;
+  testcontents?: Maybe<TestcontentEntityResponseCollection>;
   testimonial?: Maybe<TestimonialEntityResponse>;
   testimonials?: Maybe<TestimonialEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
@@ -756,11 +763,9 @@ export type Query = {
   works?: Maybe<WorkEntityResponseCollection>;
 };
 
-
 export type QueryAboutArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryAboutsArgs = {
   filters?: InputMaybe<AboutFiltersInput>;
@@ -769,11 +774,9 @@ export type QueryAboutsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryBrandArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryBrandsArgs = {
   filters?: InputMaybe<BrandFiltersInput>;
@@ -782,11 +785,9 @@ export type QueryBrandsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryContactArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryContactsArgs = {
   filters?: InputMaybe<ContactFiltersInput>;
@@ -795,11 +796,9 @@ export type QueryContactsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryExperienceArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryExperiencesArgs = {
   filters?: InputMaybe<ExperienceFiltersInput>;
@@ -808,11 +807,9 @@ export type QueryExperiencesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryI18NLocaleArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryI18NLocalesArgs = {
   filters?: InputMaybe<I18NLocaleFiltersInput>;
@@ -820,11 +817,9 @@ export type QueryI18NLocalesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QuerySkillArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QuerySkillsArgs = {
   filters?: InputMaybe<SkillFiltersInput>;
@@ -833,11 +828,31 @@ export type QuerySkillsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+export type QueryTagArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryTagsArgs = {
+  filters?: InputMaybe<TagFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryTestcontentArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryTestcontentsArgs = {
+  filters?: InputMaybe<TestcontentFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
 
 export type QueryTestimonialArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryTestimonialsArgs = {
   filters?: InputMaybe<TestimonialFiltersInput>;
@@ -846,11 +861,9 @@ export type QueryTestimonialsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUploadFileArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUploadFilesArgs = {
   filters?: InputMaybe<UploadFileFiltersInput>;
@@ -858,11 +871,9 @@ export type QueryUploadFilesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUploadFolderArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUploadFoldersArgs = {
   filters?: InputMaybe<UploadFolderFiltersInput>;
@@ -870,11 +881,9 @@ export type QueryUploadFoldersArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUsersPermissionsRoleArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUsersPermissionsRolesArgs = {
   filters?: InputMaybe<UsersPermissionsRoleFiltersInput>;
@@ -882,11 +891,9 @@ export type QueryUsersPermissionsRolesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUsersPermissionsUserArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUsersPermissionsUsersArgs = {
   filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
@@ -894,16 +901,13 @@ export type QueryUsersPermissionsUsersArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryWorkArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type QueryWorkExperienceArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryWorkExperiencesArgs = {
   filters?: InputMaybe<WorkExperienceFiltersInput>;
@@ -911,7 +915,6 @@ export type QueryWorkExperiencesArgs = {
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
-
 
 export type QueryWorksArgs = {
   filters?: InputMaybe<WorkFiltersInput>;
@@ -993,6 +996,93 @@ export type StringFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   startsWith?: InputMaybe<Scalars['String']>;
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  tag: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type TagEntity = {
+  __typename?: 'TagEntity';
+  attributes?: Maybe<Tag>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type TagEntityResponse = {
+  __typename?: 'TagEntityResponse';
+  data?: Maybe<TagEntity>;
+};
+
+export type TagEntityResponseCollection = {
+  __typename?: 'TagEntityResponseCollection';
+  data: Array<TagEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type TagFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<TagFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<TagFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<TagFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  tag?: InputMaybe<StringFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type TagInput = {
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  tag?: InputMaybe<Scalars['String']>;
+};
+
+export type TagRelationResponseCollection = {
+  __typename?: 'TagRelationResponseCollection';
+  data: Array<TagEntity>;
+};
+
+export type Testcontent = {
+  __typename?: 'Testcontent';
+  content: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type TestcontentEntity = {
+  __typename?: 'TestcontentEntity';
+  attributes?: Maybe<Testcontent>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type TestcontentEntityResponse = {
+  __typename?: 'TestcontentEntityResponse';
+  data?: Maybe<TestcontentEntity>;
+};
+
+export type TestcontentEntityResponseCollection = {
+  __typename?: 'TestcontentEntityResponseCollection';
+  data: Array<TestcontentEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type TestcontentFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<TestcontentFiltersInput>>>;
+  content?: InputMaybe<StringFilterInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<TestcontentFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<TestcontentFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type TestcontentInput = {
+  content?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type Testimonial = {
@@ -1143,13 +1233,11 @@ export type UploadFolder = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-
 export type UploadFolderChildrenArgs = {
   filters?: InputMaybe<UploadFolderFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
-
 
 export type UploadFolderFilesArgs = {
   filters?: InputMaybe<UploadFileFiltersInput>;
@@ -1295,13 +1383,11 @@ export type UsersPermissionsRole = {
   users?: Maybe<UsersPermissionsUserRelationResponseCollection>;
 };
 
-
 export type UsersPermissionsRolePermissionsArgs = {
   filters?: InputMaybe<UsersPermissionsPermissionFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
-
 
 export type UsersPermissionsRoleUsersArgs = {
   filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
@@ -1420,14 +1506,21 @@ export type UsersPermissionsUserRelationResponseCollection = {
 export type Work = {
   __typename?: 'Work';
   CodeLink?: Maybe<Scalars['String']>;
-  Description?: Maybe<Scalars['String']>;
+  Description: Scalars['String'];
   ImageUrl: UploadFileEntityResponse;
-  ProjectLink?: Maybe<Scalars['String']>;
-  Tags?: Maybe<Enum_Work_Tags>;
+  ProjectLink: Scalars['String'];
   Title: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   publishedAt?: Maybe<Scalars['DateTime']>;
+  tags?: Maybe<TagRelationResponseCollection>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type WorkTagsArgs = {
+  filters?: InputMaybe<TagFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type WorkEntity = {
@@ -1453,17 +1546,8 @@ export type WorkExperience = {
   Description?: Maybe<Scalars['String']>;
   Name: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
-  experiences?: Maybe<ExperienceRelationResponseCollection>;
   publishedAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-
-export type WorkExperienceExperiencesArgs = {
-  filters?: InputMaybe<ExperienceFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type WorkExperienceEntity = {
@@ -1489,7 +1573,6 @@ export type WorkExperienceFiltersInput = {
   Name?: InputMaybe<StringFilterInput>;
   and?: InputMaybe<Array<InputMaybe<WorkExperienceFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
-  experiences?: InputMaybe<ExperienceFiltersInput>;
   id?: InputMaybe<IdFilterInput>;
   not?: InputMaybe<WorkExperienceFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<WorkExperienceFiltersInput>>>;
@@ -1501,15 +1584,18 @@ export type WorkExperienceInput = {
   Compagny?: InputMaybe<Scalars['String']>;
   Description?: InputMaybe<Scalars['String']>;
   Name?: InputMaybe<Scalars['String']>;
-  experiences?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type WorkExperienceRelationResponseCollection = {
+  __typename?: 'WorkExperienceRelationResponseCollection';
+  data: Array<WorkExperienceEntity>;
 };
 
 export type WorkFiltersInput = {
   CodeLink?: InputMaybe<StringFilterInput>;
   Description?: InputMaybe<StringFilterInput>;
   ProjectLink?: InputMaybe<StringFilterInput>;
-  Tags?: InputMaybe<StringFilterInput>;
   Title?: InputMaybe<StringFilterInput>;
   and?: InputMaybe<Array<InputMaybe<WorkFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
@@ -1517,6 +1603,7 @@ export type WorkFiltersInput = {
   not?: InputMaybe<WorkFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<WorkFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
+  tags?: InputMaybe<TagFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
@@ -1525,605 +1612,159 @@ export type WorkInput = {
   Description?: InputMaybe<Scalars['String']>;
   ImageUrl?: InputMaybe<Scalars['ID']>;
   ProjectLink?: InputMaybe<Scalars['String']>;
-  Tags?: InputMaybe<Enum_Work_Tags>;
   Title?: InputMaybe<Scalars['String']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 export type GetOneAboutQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
-
-export type GetOneAboutQuery = { __typename?: 'Query', about?: { __typename?: 'AboutEntityResponse', data?: { __typename?: 'AboutEntity', id?: string | null, attributes?: { __typename?: 'About', createdAt?: any | null, updatedAt?: any | null, Description?: string | null, Title: string, publishedAt?: any | null, ImageUrl?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, previewUrl?: string | null, mime: string, name: string } | null } | null } | null } | null } | null } | null };
+export type GetOneAboutQuery = {
+  __typename?: 'Query';
+  about?: {
+    __typename?: 'AboutEntityResponse';
+    data?: {
+      __typename?: 'AboutEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'About';
+        createdAt?: any | null;
+        updatedAt?: any | null;
+        Description?: string | null;
+        Title: string;
+        publishedAt?: any | null;
+        ImageUrl?: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              url: string;
+              previewUrl?: string | null;
+              mime: string;
+              name: string;
+            } | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+};
 
 export type GetAllAboutQueryVariables = Exact<{
   filters?: InputMaybe<AboutFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+  sort?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
 }>;
 
-
-export type GetAllAboutQuery = { __typename?: 'Query', abouts?: { __typename?: 'AboutEntityResponseCollection', data: Array<{ __typename?: 'AboutEntity', id?: string | null, attributes?: { __typename?: 'About', createdAt?: any | null, updatedAt?: any | null, Description?: string | null, Title: string, publishedAt?: any | null, ImageUrl?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, previewUrl?: string | null, mime: string, name: string } | null } | null } | null } | null }> } | null };
-
-export type LoginMutationVariables = Exact<{
-  input: UsersPermissionsLoginInput;
-}>;
-
-
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, confirmed?: boolean | null, email?: string | null, username: string, role?: { __typename?: 'UsersPermissionsMeRole', id: string, name: string, description?: string | null } | null } } };
-
-export type RegisterMutationVariables = Exact<{
-  input: UsersPermissionsRegisterInput;
-}>;
-
-
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, username: string, email?: string | null, confirmed?: boolean | null, blocked?: boolean | null, role?: { __typename?: 'UsersPermissionsMeRole', id: string, name: string, description?: string | null } | null } } };
-
-export type ExperiencesQueryVariables = Exact<{
-  filters?: InputMaybe<ExperienceFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-}>;
-
-
-export type ExperiencesQuery = { __typename?: 'Query', experiences?: { __typename?: 'ExperienceEntityResponseCollection', data: Array<{ __typename?: 'ExperienceEntity', id?: string | null, attributes?: { __typename?: 'Experience', createdAt?: any | null, updatedAt?: any | null, publishedAt?: any | null, Year: number, work_experience?: { __typename?: 'WorkExperienceEntityResponse', data?: { __typename?: 'WorkExperienceEntity', id?: string | null, attributes?: { __typename?: 'WorkExperience', Name: string, Description?: string | null, createdAt?: any | null, updatedAt?: any | null, Compagny?: string | null } | null } | null } | null } | null }> } | null };
-
-export type SkillsQueryVariables = Exact<{
-  filters?: InputMaybe<SkillFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-}>;
-
-
-export type SkillsQuery = { __typename?: 'Query', skills?: { __typename?: 'SkillEntityResponseCollection', data: Array<{ __typename?: 'SkillEntity', id?: string | null, attributes?: { __typename?: 'Skill', updatedAt?: any | null, createdAt?: any | null, Name: string, publishedAt?: any | null, BackgroundColor?: string | null, ImageUrl?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, previewUrl?: string | null, mime: string, name: string } | null } | null } | null } | null }> } | null };
-
-export type TestimonialsQueryVariables = Exact<{
-  filters?: InputMaybe<TestimonialFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-}>;
-
-
-export type TestimonialsQuery = { __typename?: 'Query', testimonials?: { __typename?: 'TestimonialEntityResponseCollection', data: Array<{ __typename?: 'TestimonialEntity', id?: string | null, attributes?: { __typename?: 'Testimonial', publishedAt?: any | null, createdAt?: any | null, updatedAt?: any | null, Compagny?: string | null, Feedback?: string | null, Name: string, ImageUrl?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, previewUrl?: string | null, mime: string, name: string } | null } | null } | null } | null }> } | null };
-
-export type WorksQueryVariables = Exact<{
-  filters?: InputMaybe<WorkFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-}>;
-
-
-export type WorksQuery = { __typename?: 'Query', works?: { __typename?: 'WorkEntityResponseCollection', data: Array<{ __typename?: 'WorkEntity', id?: string | null, attributes?: { __typename?: 'Work', updatedAt?: any | null, createdAt?: any | null, publishedAt?: any | null, Description?: string | null, Title: string, CodeLink?: string | null, ProjectLink?: string | null, Tags?: Enum_Work_Tags | null, ImageUrl: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, previewUrl?: string | null, mime: string, name: string } | null } | null } } | null }> } | null };
-
-export type WorkExperiencesQueryVariables = Exact<{
-  filters?: InputMaybe<WorkExperienceFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-}>;
-
-
-export type WorkExperiencesQuery = { __typename?: 'Query', workExperiences?: { __typename?: 'WorkExperienceEntityResponseCollection', data: Array<{ __typename?: 'WorkExperienceEntity', id?: string | null, attributes?: { __typename?: 'WorkExperience', publishedAt?: any | null, Description?: string | null, updatedAt?: any | null, createdAt?: any | null, Compagny?: string | null } | null }> } | null };
-
+export type GetAllAboutQuery = {
+  __typename?: 'Query';
+  abouts?: {
+    __typename?: 'AboutEntityResponseCollection';
+    data: Array<{
+      __typename?: 'AboutEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'About';
+        createdAt?: any | null;
+        updatedAt?: any | null;
+        Description?: string | null;
+        Title: string;
+        publishedAt?: any | null;
+        ImageUrl?: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              url: string;
+              previewUrl?: string | null;
+              mime: string;
+              name: string;
+            } | null;
+          } | null;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
 
 export const GetOneAboutDocument = gql`
-    query getOneAbout($id: ID) {
-  about(id: $id) {
-    data {
-      id
-      attributes {
-        createdAt
-        updatedAt
-        Description
-        Title
-        publishedAt
-        ImageUrl {
-          data {
-            id
-            attributes {
-              url
-              previewUrl
-              mime
-              name
+  query getOneAbout($id: ID) {
+    about(id: $id) {
+      data {
+        id
+        attributes {
+          createdAt
+          updatedAt
+          Description
+          Title
+          publishedAt
+          ImageUrl {
+            data {
+              id
+              attributes {
+                url
+                previewUrl
+                mime
+                name
+              }
             }
           }
         }
       }
     }
   }
-}
-    `;
-
-/**
- * __useGetOneAboutQuery__
- *
- * To run a query within a React component, call `useGetOneAboutQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOneAboutQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOneAboutQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetOneAboutQuery(baseOptions?: Apollo.QueryHookOptions<GetOneAboutQuery, GetOneAboutQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOneAboutQuery, GetOneAboutQueryVariables>(GetOneAboutDocument, options);
-      }
-export function useGetOneAboutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneAboutQuery, GetOneAboutQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOneAboutQuery, GetOneAboutQueryVariables>(GetOneAboutDocument, options);
-        }
-export type GetOneAboutQueryHookResult = ReturnType<typeof useGetOneAboutQuery>;
-export type GetOneAboutLazyQueryHookResult = ReturnType<typeof useGetOneAboutLazyQuery>;
-export type GetOneAboutQueryResult = Apollo.QueryResult<GetOneAboutQuery, GetOneAboutQueryVariables>;
+`;
+export type GetOneAboutQueryResult = Apollo.QueryResult<
+  GetOneAboutQuery,
+  GetOneAboutQueryVariables
+>;
 export const GetAllAboutDocument = gql`
-    query getAllAbout($filters: AboutFiltersInput, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []) {
-  abouts(
-    filters: $filters
-    pagination: $pagination
-    publicationState: $publicationState
-    sort: $sort
+  query getAllAbout(
+    $filters: AboutFiltersInput
+    $pagination: PaginationArg = {}
+    $publicationState: PublicationState = LIVE
+    $sort: [String] = []
   ) {
-    data {
-      id
-      attributes {
-        createdAt
-        updatedAt
-        Description
-        Title
-        publishedAt
-        ImageUrl {
-          data {
-            id
-            attributes {
-              url
-              previewUrl
-              mime
-              name
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetAllAboutQuery__
- *
- * To run a query within a React component, call `useGetAllAboutQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllAboutQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAllAboutQuery({
- *   variables: {
- *      filters: // value for 'filters'
- *      pagination: // value for 'pagination'
- *      publicationState: // value for 'publicationState'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useGetAllAboutQuery(baseOptions?: Apollo.QueryHookOptions<GetAllAboutQuery, GetAllAboutQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllAboutQuery, GetAllAboutQueryVariables>(GetAllAboutDocument, options);
-      }
-export function useGetAllAboutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllAboutQuery, GetAllAboutQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllAboutQuery, GetAllAboutQueryVariables>(GetAllAboutDocument, options);
-        }
-export type GetAllAboutQueryHookResult = ReturnType<typeof useGetAllAboutQuery>;
-export type GetAllAboutLazyQueryHookResult = ReturnType<typeof useGetAllAboutLazyQuery>;
-export type GetAllAboutQueryResult = Apollo.QueryResult<GetAllAboutQuery, GetAllAboutQueryVariables>;
-export const LoginDocument = gql`
-    mutation login($input: UsersPermissionsLoginInput!) {
-  login(input: $input) {
-    user {
-      id
-      confirmed
-      email
-      username
-      role {
+    abouts(
+      filters: $filters
+      pagination: $pagination
+      publicationState: $publicationState
+      sort: $sort
+    ) {
+      data {
         id
-        name
-        description
-      }
-    }
-    jwt
-  }
-}
-    `;
-export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
-
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
-      }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const RegisterDocument = gql`
-    mutation register($input: UsersPermissionsRegisterInput!) {
-  register(input: $input) {
-    user {
-      id
-      username
-      email
-      confirmed
-      blocked
-      role {
-        id
-        name
-        description
-      }
-    }
-    jwt
-  }
-}
-    `;
-export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
-
-/**
- * __useRegisterMutation__
- *
- * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [registerMutation, { data, loading, error }] = useRegisterMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
-      }
-export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
-export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
-export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const ExperiencesDocument = gql`
-    query Experiences($filters: ExperienceFiltersInput, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []) {
-  experiences(
-    filters: $filters
-    pagination: $pagination
-    publicationState: $publicationState
-    sort: $sort
-  ) {
-    data {
-      id
-      attributes {
-        createdAt
-        updatedAt
-        publishedAt
-        Year
-        work_experience {
-          data {
-            id
-            attributes {
-              Name
-              Description
-              createdAt
-              updatedAt
-              Compagny
+        attributes {
+          createdAt
+          updatedAt
+          Description
+          Title
+          publishedAt
+          ImageUrl {
+            data {
+              id
+              attributes {
+                url
+                previewUrl
+                mime
+                name
+              }
             }
           }
         }
       }
     }
   }
-}
-    `;
-
-/**
- * __useExperiencesQuery__
- *
- * To run a query within a React component, call `useExperiencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useExperiencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useExperiencesQuery({
- *   variables: {
- *      filters: // value for 'filters'
- *      pagination: // value for 'pagination'
- *      publicationState: // value for 'publicationState'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useExperiencesQuery(baseOptions?: Apollo.QueryHookOptions<ExperiencesQuery, ExperiencesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ExperiencesQuery, ExperiencesQueryVariables>(ExperiencesDocument, options);
-      }
-export function useExperiencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExperiencesQuery, ExperiencesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ExperiencesQuery, ExperiencesQueryVariables>(ExperiencesDocument, options);
-        }
-export type ExperiencesQueryHookResult = ReturnType<typeof useExperiencesQuery>;
-export type ExperiencesLazyQueryHookResult = ReturnType<typeof useExperiencesLazyQuery>;
-export type ExperiencesQueryResult = Apollo.QueryResult<ExperiencesQuery, ExperiencesQueryVariables>;
-export const SkillsDocument = gql`
-    query Skills($filters: SkillFiltersInput, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []) {
-  skills(
-    sort: $sort
-    publicationState: $publicationState
-    pagination: $pagination
-    filters: $filters
-  ) {
-    data {
-      id
-      attributes {
-        updatedAt
-        createdAt
-        Name
-        publishedAt
-        BackgroundColor
-        ImageUrl {
-          data {
-            id
-            attributes {
-              url
-              previewUrl
-              mime
-              name
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useSkillsQuery__
- *
- * To run a query within a React component, call `useSkillsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSkillsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSkillsQuery({
- *   variables: {
- *      filters: // value for 'filters'
- *      pagination: // value for 'pagination'
- *      publicationState: // value for 'publicationState'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useSkillsQuery(baseOptions?: Apollo.QueryHookOptions<SkillsQuery, SkillsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SkillsQuery, SkillsQueryVariables>(SkillsDocument, options);
-      }
-export function useSkillsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SkillsQuery, SkillsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SkillsQuery, SkillsQueryVariables>(SkillsDocument, options);
-        }
-export type SkillsQueryHookResult = ReturnType<typeof useSkillsQuery>;
-export type SkillsLazyQueryHookResult = ReturnType<typeof useSkillsLazyQuery>;
-export type SkillsQueryResult = Apollo.QueryResult<SkillsQuery, SkillsQueryVariables>;
-export const TestimonialsDocument = gql`
-    query Testimonials($filters: TestimonialFiltersInput, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []) {
-  testimonials(
-    filters: $filters
-    pagination: $pagination
-    publicationState: $publicationState
-    sort: $sort
-  ) {
-    data {
-      id
-      attributes {
-        publishedAt
-        createdAt
-        updatedAt
-        Compagny
-        Feedback
-        Name
-        ImageUrl {
-          data {
-            id
-            attributes {
-              url
-              previewUrl
-              mime
-              name
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useTestimonialsQuery__
- *
- * To run a query within a React component, call `useTestimonialsQuery` and pass it any options that fit your needs.
- * When your component renders, `useTestimonialsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTestimonialsQuery({
- *   variables: {
- *      filters: // value for 'filters'
- *      pagination: // value for 'pagination'
- *      publicationState: // value for 'publicationState'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useTestimonialsQuery(baseOptions?: Apollo.QueryHookOptions<TestimonialsQuery, TestimonialsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TestimonialsQuery, TestimonialsQueryVariables>(TestimonialsDocument, options);
-      }
-export function useTestimonialsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TestimonialsQuery, TestimonialsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TestimonialsQuery, TestimonialsQueryVariables>(TestimonialsDocument, options);
-        }
-export type TestimonialsQueryHookResult = ReturnType<typeof useTestimonialsQuery>;
-export type TestimonialsLazyQueryHookResult = ReturnType<typeof useTestimonialsLazyQuery>;
-export type TestimonialsQueryResult = Apollo.QueryResult<TestimonialsQuery, TestimonialsQueryVariables>;
-export const WorksDocument = gql`
-    query Works($filters: WorkFiltersInput, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []) {
-  works(
-    sort: $sort
-    publicationState: $publicationState
-    pagination: $pagination
-    filters: $filters
-  ) {
-    data {
-      id
-      attributes {
-        ImageUrl {
-          data {
-            id
-            attributes {
-              url
-              previewUrl
-              mime
-              name
-            }
-          }
-        }
-        updatedAt
-        createdAt
-        publishedAt
-        Description
-        Title
-        CodeLink
-        ProjectLink
-        Tags
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useWorksQuery__
- *
- * To run a query within a React component, call `useWorksQuery` and pass it any options that fit your needs.
- * When your component renders, `useWorksQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWorksQuery({
- *   variables: {
- *      filters: // value for 'filters'
- *      pagination: // value for 'pagination'
- *      publicationState: // value for 'publicationState'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useWorksQuery(baseOptions?: Apollo.QueryHookOptions<WorksQuery, WorksQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<WorksQuery, WorksQueryVariables>(WorksDocument, options);
-      }
-export function useWorksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorksQuery, WorksQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<WorksQuery, WorksQueryVariables>(WorksDocument, options);
-        }
-export type WorksQueryHookResult = ReturnType<typeof useWorksQuery>;
-export type WorksLazyQueryHookResult = ReturnType<typeof useWorksLazyQuery>;
-export type WorksQueryResult = Apollo.QueryResult<WorksQuery, WorksQueryVariables>;
-export const WorkExperiencesDocument = gql`
-    query WorkExperiences($filters: WorkExperienceFiltersInput, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []) {
-  workExperiences(
-    sort: $sort
-    publicationState: $publicationState
-    pagination: $pagination
-    filters: $filters
-  ) {
-    data {
-      id
-      attributes {
-        publishedAt
-        Description
-        updatedAt
-        createdAt
-        Compagny
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useWorkExperiencesQuery__
- *
- * To run a query within a React component, call `useWorkExperiencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useWorkExperiencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWorkExperiencesQuery({
- *   variables: {
- *      filters: // value for 'filters'
- *      pagination: // value for 'pagination'
- *      publicationState: // value for 'publicationState'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useWorkExperiencesQuery(baseOptions?: Apollo.QueryHookOptions<WorkExperiencesQuery, WorkExperiencesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<WorkExperiencesQuery, WorkExperiencesQueryVariables>(WorkExperiencesDocument, options);
-      }
-export function useWorkExperiencesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkExperiencesQuery, WorkExperiencesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<WorkExperiencesQuery, WorkExperiencesQueryVariables>(WorkExperiencesDocument, options);
-        }
-export type WorkExperiencesQueryHookResult = ReturnType<typeof useWorkExperiencesQuery>;
-export type WorkExperiencesLazyQueryHookResult = ReturnType<typeof useWorkExperiencesLazyQuery>;
-export type WorkExperiencesQueryResult = Apollo.QueryResult<WorkExperiencesQuery, WorkExperiencesQueryVariables>;
+`;
+export type GetAllAboutQueryResult = Apollo.QueryResult<
+  GetAllAboutQuery,
+  GetAllAboutQueryVariables
+>;

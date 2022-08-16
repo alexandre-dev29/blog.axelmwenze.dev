@@ -2,30 +2,31 @@ import { onError } from '@apollo/client/link/error';
 import { ErrorTypeGraphQl } from '@next-template-nx/data';
 import { setContext } from '@apollo/client/link/context';
 import { HttpLink } from '@apollo/client';
+import { GraphqlErrorState } from '../StateManagement';
 
-export const ErrorLinkHandler = (
-  setErrorType: (Request: ErrorTypeGraphQl) => void,
-  setIsOpen: (stat: boolean) => void,
-  setMessagesError: (messages: Array<string>) => void
-) =>
-  onError(({ graphQLErrors, networkError }) => {
+export const ErrorLinkHandler = () => {
+  const { setState } = GraphqlErrorState;
+
+  return onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
-      setMessagesError(graphQLErrors.map((a) => a.message));
-      setErrorType(ErrorTypeGraphQl.Request);
-      setIsOpen(true);
+      setState({ messagesError: graphQLErrors.map((a) => a.message) });
+      setState({ errorType: ErrorTypeGraphQl.Request });
+      setState({ isOpen: true });
     }
     if (networkError) {
-      setErrorType(ErrorTypeGraphQl.Network);
-      setMessagesError([
-        'Connection Issue Please check Your internet connection and try again',
-      ]);
-      setIsOpen(true);
+      setState({ errorType: ErrorTypeGraphQl.Network });
+      setState({
+        messagesError: [
+          'Connection Issue Please check Your internet connection and try again',
+        ],
+      });
+      setState({ isOpen: true });
     }
   });
+};
 
 export const authLinkApp = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('accessToken');
   // return the headers to the context so httpLink can read them
   return {
     headers: {
