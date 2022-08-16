@@ -9,7 +9,6 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-
 import { authLinkApp, ErrorLinkHandler, httpLinkApp } from './GraphqlConfig';
 import { DarkTheme, ErrorPopup, LightTheme } from '@next-template-nx/ui';
 import Head from 'next/head';
@@ -47,7 +46,13 @@ export const withApollo = (Comp: NextPage) => (props: any) => {
   }
 
   return (
-    <div style={{ position: 'relative', zIndex: 0 }}>
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 0,
+        padding: '1rem 10rem',
+      }}
+    >
       <ErrorPopup
         errorType={errorType}
         messages={messagesError}
