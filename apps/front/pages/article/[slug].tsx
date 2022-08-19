@@ -39,7 +39,7 @@ export const getServerSideProps: GetStaticProps = async () => {
   let markdown;
   try {
     markdown = fs.readFileSync(
-      path.join(process.cwd(), 'apps', 'front', 'public', 'simple_mdx_file.mdx')
+      path.join(process.cwd(), 'public', 'simple_mdx_file.mdx')
     );
   } catch (e) {
     log.error(e);
