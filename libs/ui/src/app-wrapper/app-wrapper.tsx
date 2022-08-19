@@ -30,7 +30,7 @@ export function AppWrapper({ children }: AppWrapperProps) {
   function closeModal() {
     setIsOpen(false);
   }
-  const errorLink = ErrorLinkHandler(setErrorType, setIsOpen, setMessagesError);
+  const errorLink = ErrorLinkHandler();
 
   const apolloClient = new ApolloClient({
     link: from([errorLink, authLinkApp, httpLinkApp]),
