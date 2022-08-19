@@ -34,7 +34,7 @@ const PostPage = ({ mdxSource }) => {
                 'py-4 border-b-2 text-md md:text-xl border-[#313bac] text-secondary font-bold '
               }
             >
-              Popular
+              Populars
             </button>
             <button
               className={'py-4 text-md md:text-xl font-bold text-gray-600'}
