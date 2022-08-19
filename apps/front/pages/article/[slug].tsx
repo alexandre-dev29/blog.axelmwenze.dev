@@ -81,9 +81,7 @@ const PostPage = ({ mdxSource }) => {
 export const getServerSideProps: GetStaticProps = async () => {
   let markdown;
   try {
-    markdown = fs.readFileSync(
-      path.join(process.cwd(), 'app', 'front', 'public', 'simple_mdx_file.mdx')
-    );
+    markdown = fs.readFileSync(path.join(process.cwd(), 'simple_mdx_file.mdx'));
     log.warn(markdown);
   } catch (e) {
     log.error(e);
