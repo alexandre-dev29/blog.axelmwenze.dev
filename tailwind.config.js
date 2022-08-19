@@ -8,7 +8,15 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      typography: {
+        DEFAULT: { css: { pre: false } },
+        sm: { pre: false },
+        lg: { pre: false },
+        xl: { pre: false },
+        '2xl': { pre: false },
+      },
+    },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 };
