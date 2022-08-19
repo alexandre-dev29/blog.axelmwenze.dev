@@ -79,7 +79,7 @@ const PostPage = ({ mdxSource }) => {
 
 export const getServerSideProps: GetStaticProps = async () => {
   const markdown = fs.readFileSync(
-    path.join('apps', 'front', 'pages', 'article', 'simple_mdx_file.mdx')
+    path.join('apps', 'front', 'public', 'simple_mdx_file.mdx')
   );
   const { content } = matter(markdown);
   const mdxSource = await serialize(content, {
