@@ -3,29 +3,8 @@ import { BsArrowRight } from 'react-icons/bs';
 
 const HomePage = (props) => {
   return (
-    <div className={'pt-10'}>
-      <div className={'px-56'}>
-        <h1 className={'text-3xl font-extrabold default-police '}>
-          Axel <span className={'text-secondary'}>Mwenze</span>
-        </h1>
-        <div className={'border-b border-b-2 border-gray-200 mt-6 flex'}>
-          <div className={'flex-1 flex gap-8'}>
-            <button
-              className={
-                'py-4 border-b-2 border-[#313bac] text-secondary font-bold '
-              }
-            >
-              Popular
-            </button>
-            <button className={'py-4 font-bold text-gray-600'}>
-              Engineering{' '}
-            </button>
-            <button className={'py-4  font-bold text-gray-600'}>
-              Growth Marketing{' '}
-            </button>
-            <button className={'py-4  font-bold text-gray-600'}>Company</button>
-          </div>
-        </div>
+    <div className={'mt-12'}>
+      <section className={'px-56'}>
         <div className={'h-[30vh] grid grid-cols-2 gap-24 mt-8 '}>
           <div className={'flex flex-col justify-between'}>
             <h2 className={'font-bold default-police text-4xl text-gray-800'}>
@@ -63,7 +42,8 @@ const HomePage = (props) => {
           </div>
           <div className={'bg-teal-600 rounded-md'}></div>
         </div>
-
+      </section>
+      <section className={'px-56'}>
         <div className={'mt-12'}>
           <div className={'mt-8 flex justify-between'}>
             <div className={'relative'}>
@@ -240,46 +220,7 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-      </div>
-      <section
-        style={{ backgroundColor: 'rgb(245, 246, 251)' }}
-        className={'h-[30vh] mt-16 flex justify-center items-center'}
-      >
-        <div className={'h-3/4 w-7/12 bg-sky-800 px-12 py-6 grid grid-cols-5'}>
-          <div className={'col-span-3 flex flex-col '}>
-            <h4 className={'font-bold text-3xl text-gray-100'}>
-              {"Don't miss any new article"}
-            </h4>
-            <p className={'mt-2 text-white'}>Subscribe to newsletter</p>
-            <div className={' flex items-center mt-4'}>
-              <input
-                type="email"
-                className={'outline-0 h-12 w-3/4 pl-4'}
-                placeholder={'Enter your email address'}
-              />
-              <button
-                className={
-                  'h-12 px-12 bg-teal-600 text-white font-bold capitalize'
-                }
-              >
-                Subscribe
-              </button>
-            </div>
-          </div>
-          <div className={'items-end'}>
-            <img
-              src={'message.svg'}
-              className={'w-[200px] ml-24'}
-              alt={'message svg'}
-            />
-          </div>
-        </div>
       </section>
-      <footer className={'flex justify-center items-center p-8 bg-sky-800'}>
-        <p className={'default-police text-white text-lg font-bold'}>
-          <a href="#">&copy; Axel Mwenze 2022</a>
-        </p>
-      </footer>
     </div>
   );
 };

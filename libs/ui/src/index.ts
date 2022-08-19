@@ -5,3 +5,4 @@ export * from './nav-bar/nav-bar';
 export * from './footer/footer';
 export * from './layout/layout';
 export * from './ThemeConfig';
+export * from './subscribe-newsletter/subscribe-newsletter';
