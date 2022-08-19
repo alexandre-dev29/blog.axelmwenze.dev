@@ -3,7 +3,7 @@ export interface CategoryProps {}
 
 export function Category(props: CategoryProps) {
   return (
-    <div className={'px-56'}>
+    <div className={''}>
       <section className={'mt-12 grid grid-cols-2 h-[25vh]'}>
         <div className={'bg-teal-600'}></div>
         <div

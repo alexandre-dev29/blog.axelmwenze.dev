@@ -3,7 +3,7 @@ import { BsArrowRight } from 'react-icons/bs';
 
 const HomePage = (props) => {
   return (
-    <div className={'mt-12 px-56'}>
+    <div>
       <section className={''}>
         <div className={'h-[30vh] grid grid-cols-2 gap-24 mt-8 '}>
           <div className={'flex flex-col justify-between'}>
