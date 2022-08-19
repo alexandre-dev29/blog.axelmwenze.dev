@@ -9,6 +9,7 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import 'highlight.js/styles/tokyo-night-dark.css';
 import { useEffect, useState } from 'react';
+import { log } from 'next-axiom';
 
 const PostPage = ({ mdxSource }) => {
   const [isSSR, setIsSSR] = useState(true);
@@ -81,10 +82,11 @@ export const getServerSideProps: GetStaticProps = async () => {
   let markdown;
   try {
     markdown = fs.readFileSync(
-      path.join(process.cwd(), 'apps', 'front', 'public', 'simple_mdx_file.mdx')
+      path.join(process.cwd(), 'app', 'front', 'public', 'simple_mdx_file.mdx')
     );
+    log.warn(markdown);
   } catch (e) {
-    console.log(e);
+    log.error(e);
   }
   const { content } = matter(markdown);
   const mdxSource = await serialize(content, {
