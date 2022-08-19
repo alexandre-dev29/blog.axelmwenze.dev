@@ -3,8 +3,8 @@ import { BsArrowRight } from 'react-icons/bs';
 
 const HomePage = (props) => {
   return (
-    <div className={'mt-12'}>
-      <section className={'px-56'}>
+    <div className={'mt-12 px-56'}>
+      <section className={''}>
         <div className={'h-[30vh] grid grid-cols-2 gap-24 mt-8 '}>
           <div className={'flex flex-col justify-between'}>
             <h2 className={'font-bold default-police text-4xl text-gray-800'}>
@@ -43,7 +43,7 @@ const HomePage = (props) => {
           <div className={'bg-teal-600 rounded-md'}></div>
         </div>
       </section>
-      <section className={'px-56'}>
+      <section className={''}>
         <div className={'mt-12'}>
           <div className={'mt-8 flex justify-between'}>
             <div className={'relative'}>
