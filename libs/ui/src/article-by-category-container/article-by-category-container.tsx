@@ -101,7 +101,7 @@ export function ArticleByCategoryContainer({
             {otherArticles
               .slice(0, 2)
               .map(({ title, author, dateString, description }, index) => (
-                <div className={'border-t-2 pt-8'}>
+                <div className={'border-t-2 pt-8'} key={index}>
                   <h2
                     className={
                       'font-bold default-police text-xl lg:text-2xl text-gray-800'

@@ -38,6 +38,7 @@ export function FeaturedArticle({
           <div className={'flex gap-4'}>
             {tags?.map((value, index) => (
               <p
+                key={index}
                 className={
                   'font-medium text-blue-500 bg-blue-200 self-start p-2 rounded-lg text-sm'
                 }
