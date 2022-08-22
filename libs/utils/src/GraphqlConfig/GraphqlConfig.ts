@@ -1,7 +1,7 @@
 import { onError } from '@apollo/client/link/error';
 import { ErrorTypeGraphQl } from '@next-template-nx/data';
 import { setContext } from '@apollo/client/link/context';
-import { HttpLink } from '@apollo/client';
+import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client';
 import { GraphqlErrorState } from '../StateManagement';
 
 export const ErrorLinkHandler = () => {
@@ -38,4 +38,14 @@ export const authLinkApp = setContext((_, { headers }) => {
 
 export const httpLinkApp = new HttpLink({
   uri: process.env.NEXT_PUBLIC_API_URL,
+});
+export const defaultApolloClient = new ApolloClient({
+  link: from([authLinkApp, httpLinkApp]),
+  cache: new InMemoryCache({
+    typePolicies: {
+      CategoryEntity: {
+        keyFields: ['id', 'attributes'],
+      },
+    },
+  }),
 });

@@ -12,6 +12,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -19,55 +20,101 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
   DateTime: any;
+  I18NLocaleCode: any;
   JSON: any;
   Upload: any;
 };
 
-export type About = {
-  __typename?: 'About';
-  Description?: Maybe<Scalars['String']>;
-  ImageUrl?: Maybe<UploadFileEntityResponse>;
+export type Article = {
+  __typename?: 'Article';
+  ArtImage: UploadFileEntityResponse;
+  Category?: Maybe<CategoryEntityResponse>;
+  Content: Scalars['String'];
+  Creator?: Maybe<CreatorEntityResponse>;
+  Description: Scalars['String'];
+  PublishedDate: Scalars['Date'];
+  Slug: Scalars['String'];
+  Tags?: Maybe<TagRelationResponseCollection>;
   Title: Scalars['String'];
+  ViewsCount?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  locale?: Maybe<Scalars['String']>;
+  localizations?: Maybe<ArticleRelationResponseCollection>;
   publishedAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type AboutEntity = {
-  __typename?: 'AboutEntity';
-  attributes?: Maybe<About>;
+export type ArticleTagsArgs = {
+  filters?: InputMaybe<TagFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type ArticleLocalizationsArgs = {
+  filters?: InputMaybe<ArticleFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type ArticleEntity = {
+  __typename?: 'ArticleEntity';
+  attributes?: Maybe<Article>;
   id?: Maybe<Scalars['ID']>;
 };
 
-export type AboutEntityResponse = {
-  __typename?: 'AboutEntityResponse';
-  data?: Maybe<AboutEntity>;
+export type ArticleEntityResponse = {
+  __typename?: 'ArticleEntityResponse';
+  data?: Maybe<ArticleEntity>;
 };
 
-export type AboutEntityResponseCollection = {
-  __typename?: 'AboutEntityResponseCollection';
-  data: Array<AboutEntity>;
+export type ArticleEntityResponseCollection = {
+  __typename?: 'ArticleEntityResponseCollection';
+  data: Array<ArticleEntity>;
   meta: ResponseCollectionMeta;
 };
 
-export type AboutFiltersInput = {
+export type ArticleFiltersInput = {
+  Category?: InputMaybe<CategoryFiltersInput>;
+  Content?: InputMaybe<StringFilterInput>;
+  Creator?: InputMaybe<CreatorFiltersInput>;
   Description?: InputMaybe<StringFilterInput>;
+  PublishedDate?: InputMaybe<DateFilterInput>;
+  Slug?: InputMaybe<StringFilterInput>;
+  Tags?: InputMaybe<TagFiltersInput>;
   Title?: InputMaybe<StringFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<AboutFiltersInput>>>;
+  ViewsCount?: InputMaybe<IntFilterInput>;
+  and?: InputMaybe<Array<InputMaybe<ArticleFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<AboutFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<AboutFiltersInput>>>;
+  locale?: InputMaybe<StringFilterInput>;
+  localizations?: InputMaybe<ArticleFiltersInput>;
+  not?: InputMaybe<ArticleFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ArticleFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
-export type AboutInput = {
+export type ArticleInput = {
+  ArtImage?: InputMaybe<Scalars['ID']>;
+  Category?: InputMaybe<Scalars['ID']>;
+  Content?: InputMaybe<Scalars['String']>;
+  Creator?: InputMaybe<Scalars['ID']>;
   Description?: InputMaybe<Scalars['String']>;
-  ImageUrl?: InputMaybe<Scalars['ID']>;
+  PublishedDate?: InputMaybe<Scalars['Date']>;
+  Slug?: InputMaybe<Scalars['String']>;
+  Tags?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   Title?: InputMaybe<Scalars['String']>;
+  ViewsCount?: InputMaybe<Scalars['Int']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ArticleRelationResponseCollection = {
+  __typename?: 'ArticleRelationResponseCollection';
+  data: Array<ArticleEntity>;
 };
 
 export type BooleanFilterInput = {
@@ -94,94 +141,149 @@ export type BooleanFilterInput = {
   startsWith?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type Brand = {
-  __typename?: 'Brand';
-  ImageUrl?: Maybe<UploadFileEntityResponse>;
-  Name?: Maybe<Scalars['String']>;
+export type Category = {
+  __typename?: 'Category';
+  Articles?: Maybe<ArticleRelationResponseCollection>;
+  CatImage?: Maybe<UploadFileEntityResponse>;
+  CategoryName: Scalars['String'];
+  Description: Scalars['String'];
+  FeaturedArticle?: Maybe<ArticleEntityResponse>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  locale?: Maybe<Scalars['String']>;
+  localizations?: Maybe<CategoryRelationResponseCollection>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type CategoryArticlesArgs = {
+  filters?: InputMaybe<ArticleFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type CategoryLocalizationsArgs = {
+  filters?: InputMaybe<CategoryFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type CategoryEntity = {
+  __typename?: 'CategoryEntity';
+  attributes?: Maybe<Category>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type CategoryEntityResponse = {
+  __typename?: 'CategoryEntityResponse';
+  data?: Maybe<CategoryEntity>;
+};
+
+export type CategoryEntityResponseCollection = {
+  __typename?: 'CategoryEntityResponseCollection';
+  data: Array<CategoryEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type CategoryFiltersInput = {
+  Articles?: InputMaybe<ArticleFiltersInput>;
+  CategoryName?: InputMaybe<StringFilterInput>;
+  Description?: InputMaybe<StringFilterInput>;
+  FeaturedArticle?: InputMaybe<ArticleFiltersInput>;
+  and?: InputMaybe<Array<InputMaybe<CategoryFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  locale?: InputMaybe<StringFilterInput>;
+  localizations?: InputMaybe<CategoryFiltersInput>;
+  not?: InputMaybe<CategoryFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<CategoryFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type CategoryInput = {
+  Articles?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  CatImage?: InputMaybe<Scalars['ID']>;
+  CategoryName?: InputMaybe<Scalars['String']>;
+  Description?: InputMaybe<Scalars['String']>;
+  FeaturedArticle?: InputMaybe<Scalars['ID']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type CategoryRelationResponseCollection = {
+  __typename?: 'CategoryRelationResponseCollection';
+  data: Array<CategoryEntity>;
+};
+
+export type Creator = {
+  __typename?: 'Creator';
+  Bio: Scalars['String'];
+  CreatorImage: UploadFileEntityResponse;
+  CreatorName: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   publishedAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type BrandEntity = {
-  __typename?: 'BrandEntity';
-  attributes?: Maybe<Brand>;
+export type CreatorEntity = {
+  __typename?: 'CreatorEntity';
+  attributes?: Maybe<Creator>;
   id?: Maybe<Scalars['ID']>;
 };
 
-export type BrandEntityResponse = {
-  __typename?: 'BrandEntityResponse';
-  data?: Maybe<BrandEntity>;
+export type CreatorEntityResponse = {
+  __typename?: 'CreatorEntityResponse';
+  data?: Maybe<CreatorEntity>;
 };
 
-export type BrandEntityResponseCollection = {
-  __typename?: 'BrandEntityResponseCollection';
-  data: Array<BrandEntity>;
+export type CreatorEntityResponseCollection = {
+  __typename?: 'CreatorEntityResponseCollection';
+  data: Array<CreatorEntity>;
   meta: ResponseCollectionMeta;
 };
 
-export type BrandFiltersInput = {
-  Name?: InputMaybe<StringFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<BrandFiltersInput>>>;
+export type CreatorFiltersInput = {
+  Bio?: InputMaybe<StringFilterInput>;
+  CreatorName?: InputMaybe<StringFilterInput>;
+  and?: InputMaybe<Array<InputMaybe<CreatorFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<BrandFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<BrandFiltersInput>>>;
+  not?: InputMaybe<CreatorFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<CreatorFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
-export type BrandInput = {
-  ImageUrl?: InputMaybe<Scalars['ID']>;
-  Name?: InputMaybe<Scalars['String']>;
+export type CreatorInput = {
+  Bio?: InputMaybe<Scalars['String']>;
+  CreatorImage?: InputMaybe<Scalars['ID']>;
+  CreatorName?: InputMaybe<Scalars['String']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
-export type Contact = {
-  __typename?: 'Contact';
-  Email: Scalars['String'];
-  Message: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  name: Scalars['String'];
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type ContactEntity = {
-  __typename?: 'ContactEntity';
-  attributes?: Maybe<Contact>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type ContactEntityResponse = {
-  __typename?: 'ContactEntityResponse';
-  data?: Maybe<ContactEntity>;
-};
-
-export type ContactEntityResponseCollection = {
-  __typename?: 'ContactEntityResponseCollection';
-  data: Array<ContactEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type ContactFiltersInput = {
-  Email?: InputMaybe<StringFilterInput>;
-  Message?: InputMaybe<StringFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<ContactFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  name?: InputMaybe<StringFilterInput>;
-  not?: InputMaybe<ContactFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<ContactFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type ContactInput = {
-  Email?: InputMaybe<Scalars['String']>;
-  Message?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
+export type DateFilterInput = {
+  and?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  between?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  contains?: InputMaybe<Scalars['Date']>;
+  containsi?: InputMaybe<Scalars['Date']>;
+  endsWith?: InputMaybe<Scalars['Date']>;
+  eq?: InputMaybe<Scalars['Date']>;
+  eqi?: InputMaybe<Scalars['Date']>;
+  gt?: InputMaybe<Scalars['Date']>;
+  gte?: InputMaybe<Scalars['Date']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  lt?: InputMaybe<Scalars['Date']>;
+  lte?: InputMaybe<Scalars['Date']>;
+  ne?: InputMaybe<Scalars['Date']>;
+  not?: InputMaybe<DateFilterInput>;
+  notContains?: InputMaybe<Scalars['Date']>;
+  notContainsi?: InputMaybe<Scalars['Date']>;
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  notNull?: InputMaybe<Scalars['Boolean']>;
+  null?: InputMaybe<Scalars['Boolean']>;
+  or?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  startsWith?: InputMaybe<Scalars['Date']>;
 };
 
 export type DateTimeFilterInput = {
@@ -206,57 +308,6 @@ export type DateTimeFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   startsWith?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type Experience = {
-  __typename?: 'Experience';
-  Year: Scalars['Int'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  work_experiences?: Maybe<WorkExperienceRelationResponseCollection>;
-};
-
-export type ExperienceWork_ExperiencesArgs = {
-  filters?: InputMaybe<WorkExperienceFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type ExperienceEntity = {
-  __typename?: 'ExperienceEntity';
-  attributes?: Maybe<Experience>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type ExperienceEntityResponse = {
-  __typename?: 'ExperienceEntityResponse';
-  data?: Maybe<ExperienceEntity>;
-};
-
-export type ExperienceEntityResponseCollection = {
-  __typename?: 'ExperienceEntityResponseCollection';
-  data: Array<ExperienceEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type ExperienceFiltersInput = {
-  Year?: InputMaybe<IntFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<ExperienceFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<ExperienceFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<ExperienceFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-  work_experiences?: InputMaybe<WorkExperienceFiltersInput>;
-};
-
-export type ExperienceInput = {
-  Year?: InputMaybe<Scalars['Int']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-  work_experiences?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 export type FileInfoInput = {
@@ -290,22 +341,17 @@ export type FloatFilterInput = {
 };
 
 export type GenericMorph =
-  | About
-  | Brand
-  | Contact
-  | Experience
+  | Article
+  | Category
+  | Creator
   | I18NLocale
-  | Skill
+  | Subscriber
   | Tag
-  | Testcontent
-  | Testimonial
   | UploadFile
   | UploadFolder
   | UsersPermissionsPermission
   | UsersPermissionsRole
-  | UsersPermissionsUser
-  | Work
-  | WorkExperience;
+  | UsersPermissionsUser;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -417,38 +463,30 @@ export type JsonFilterInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createAbout?: Maybe<AboutEntityResponse>;
-  createBrand?: Maybe<BrandEntityResponse>;
-  createContact?: Maybe<ContactEntityResponse>;
-  createExperience?: Maybe<ExperienceEntityResponse>;
-  createSkill?: Maybe<SkillEntityResponse>;
+  createArticle?: Maybe<ArticleEntityResponse>;
+  createArticleLocalization?: Maybe<ArticleEntityResponse>;
+  createCategory?: Maybe<CategoryEntityResponse>;
+  createCategoryLocalization?: Maybe<CategoryEntityResponse>;
+  createCreator?: Maybe<CreatorEntityResponse>;
+  createSubscriber?: Maybe<SubscriberEntityResponse>;
   createTag?: Maybe<TagEntityResponse>;
-  createTestcontent?: Maybe<TestcontentEntityResponse>;
-  createTestimonial?: Maybe<TestimonialEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Create a new role */
   createUsersPermissionsRole?: Maybe<UsersPermissionsCreateRolePayload>;
   /** Create a new user */
   createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
-  createWork?: Maybe<WorkEntityResponse>;
-  createWorkExperience?: Maybe<WorkExperienceEntityResponse>;
-  deleteAbout?: Maybe<AboutEntityResponse>;
-  deleteBrand?: Maybe<BrandEntityResponse>;
-  deleteContact?: Maybe<ContactEntityResponse>;
-  deleteExperience?: Maybe<ExperienceEntityResponse>;
-  deleteSkill?: Maybe<SkillEntityResponse>;
+  deleteArticle?: Maybe<ArticleEntityResponse>;
+  deleteCategory?: Maybe<CategoryEntityResponse>;
+  deleteCreator?: Maybe<CreatorEntityResponse>;
+  deleteSubscriber?: Maybe<SubscriberEntityResponse>;
   deleteTag?: Maybe<TagEntityResponse>;
-  deleteTestcontent?: Maybe<TestcontentEntityResponse>;
-  deleteTestimonial?: Maybe<TestimonialEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Delete an existing role */
   deleteUsersPermissionsRole?: Maybe<UsersPermissionsDeleteRolePayload>;
   /** Delete an existing user */
   deleteUsersPermissionsUser: UsersPermissionsUserEntityResponse;
-  deleteWork?: Maybe<WorkEntityResponse>;
-  deleteWorkExperience?: Maybe<WorkExperienceEntityResponse>;
   /** Confirm an email users email address */
   emailConfirmation?: Maybe<UsersPermissionsLoginPayload>;
   /** Request a reset password token */
@@ -460,56 +498,53 @@ export type Mutation = {
   removeFile?: Maybe<UploadFileEntityResponse>;
   /** Reset user password. Confirm with a code (resetToken from forgotPassword) */
   resetPassword?: Maybe<UsersPermissionsLoginPayload>;
-  updateAbout?: Maybe<AboutEntityResponse>;
-  updateBrand?: Maybe<BrandEntityResponse>;
-  updateContact?: Maybe<ContactEntityResponse>;
-  updateExperience?: Maybe<ExperienceEntityResponse>;
+  updateArticle?: Maybe<ArticleEntityResponse>;
+  updateCategory?: Maybe<CategoryEntityResponse>;
+  updateCreator?: Maybe<CreatorEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
-  updateSkill?: Maybe<SkillEntityResponse>;
+  updateSubscriber?: Maybe<SubscriberEntityResponse>;
   updateTag?: Maybe<TagEntityResponse>;
-  updateTestcontent?: Maybe<TestcontentEntityResponse>;
-  updateTestimonial?: Maybe<TestimonialEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Update an existing role */
   updateUsersPermissionsRole?: Maybe<UsersPermissionsUpdateRolePayload>;
   /** Update an existing user */
   updateUsersPermissionsUser: UsersPermissionsUserEntityResponse;
-  updateWork?: Maybe<WorkEntityResponse>;
-  updateWorkExperience?: Maybe<WorkExperienceEntityResponse>;
   upload: UploadFileEntityResponse;
 };
 
-export type MutationCreateAboutArgs = {
-  data: AboutInput;
+export type MutationCreateArticleArgs = {
+  data: ArticleInput;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationCreateBrandArgs = {
-  data: BrandInput;
+export type MutationCreateArticleLocalizationArgs = {
+  data?: InputMaybe<ArticleInput>;
+  id?: InputMaybe<Scalars['ID']>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationCreateContactArgs = {
-  data: ContactInput;
+export type MutationCreateCategoryArgs = {
+  data: CategoryInput;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationCreateExperienceArgs = {
-  data: ExperienceInput;
+export type MutationCreateCategoryLocalizationArgs = {
+  data?: InputMaybe<CategoryInput>;
+  id?: InputMaybe<Scalars['ID']>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationCreateSkillArgs = {
-  data: SkillInput;
+export type MutationCreateCreatorArgs = {
+  data: CreatorInput;
+};
+
+export type MutationCreateSubscriberArgs = {
+  data: SubscriberInput;
 };
 
 export type MutationCreateTagArgs = {
   data: TagInput;
-};
-
-export type MutationCreateTestcontentArgs = {
-  data: TestcontentInput;
-};
-
-export type MutationCreateTestimonialArgs = {
-  data: TestimonialInput;
 };
 
 export type MutationCreateUploadFileArgs = {
@@ -528,43 +563,25 @@ export type MutationCreateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
 };
 
-export type MutationCreateWorkArgs = {
-  data: WorkInput;
+export type MutationDeleteArticleArgs = {
+  id: Scalars['ID'];
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationCreateWorkExperienceArgs = {
-  data: WorkExperienceInput;
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID'];
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationDeleteAboutArgs = {
+export type MutationDeleteCreatorArgs = {
   id: Scalars['ID'];
 };
 
-export type MutationDeleteBrandArgs = {
-  id: Scalars['ID'];
-};
-
-export type MutationDeleteContactArgs = {
-  id: Scalars['ID'];
-};
-
-export type MutationDeleteExperienceArgs = {
-  id: Scalars['ID'];
-};
-
-export type MutationDeleteSkillArgs = {
+export type MutationDeleteSubscriberArgs = {
   id: Scalars['ID'];
 };
 
 export type MutationDeleteTagArgs = {
-  id: Scalars['ID'];
-};
-
-export type MutationDeleteTestcontentArgs = {
-  id: Scalars['ID'];
-};
-
-export type MutationDeleteTestimonialArgs = {
   id: Scalars['ID'];
 };
 
@@ -581,14 +598,6 @@ export type MutationDeleteUsersPermissionsRoleArgs = {
 };
 
 export type MutationDeleteUsersPermissionsUserArgs = {
-  id: Scalars['ID'];
-};
-
-export type MutationDeleteWorkArgs = {
-  id: Scalars['ID'];
-};
-
-export type MutationDeleteWorkExperienceArgs = {
   id: Scalars['ID'];
 };
 
@@ -625,23 +634,20 @@ export type MutationResetPasswordArgs = {
   passwordConfirmation: Scalars['String'];
 };
 
-export type MutationUpdateAboutArgs = {
-  data: AboutInput;
+export type MutationUpdateArticleArgs = {
+  data: ArticleInput;
   id: Scalars['ID'];
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationUpdateBrandArgs = {
-  data: BrandInput;
+export type MutationUpdateCategoryArgs = {
+  data: CategoryInput;
   id: Scalars['ID'];
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type MutationUpdateContactArgs = {
-  data: ContactInput;
-  id: Scalars['ID'];
-};
-
-export type MutationUpdateExperienceArgs = {
-  data: ExperienceInput;
+export type MutationUpdateCreatorArgs = {
+  data: CreatorInput;
   id: Scalars['ID'];
 };
 
@@ -650,23 +656,13 @@ export type MutationUpdateFileInfoArgs = {
   info?: InputMaybe<FileInfoInput>;
 };
 
-export type MutationUpdateSkillArgs = {
-  data: SkillInput;
+export type MutationUpdateSubscriberArgs = {
+  data: SubscriberInput;
   id: Scalars['ID'];
 };
 
 export type MutationUpdateTagArgs = {
   data: TagInput;
-  id: Scalars['ID'];
-};
-
-export type MutationUpdateTestcontentArgs = {
-  data: TestcontentInput;
-  id: Scalars['ID'];
-};
-
-export type MutationUpdateTestimonialArgs = {
-  data: TestimonialInput;
   id: Scalars['ID'];
 };
 
@@ -687,16 +683,6 @@ export type MutationUpdateUsersPermissionsRoleArgs = {
 
 export type MutationUpdateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
-  id: Scalars['ID'];
-};
-
-export type MutationUpdateWorkArgs = {
-  data: WorkInput;
-  id: Scalars['ID'];
-};
-
-export type MutationUpdateWorkExperienceArgs = {
-  data: WorkExperienceInput;
   id: Scalars['ID'];
 };
 
@@ -730,25 +716,19 @@ export enum PublicationState {
 
 export type Query = {
   __typename?: 'Query';
-  about?: Maybe<AboutEntityResponse>;
-  abouts?: Maybe<AboutEntityResponseCollection>;
-  brand?: Maybe<BrandEntityResponse>;
-  brands?: Maybe<BrandEntityResponseCollection>;
-  contact?: Maybe<ContactEntityResponse>;
-  contacts?: Maybe<ContactEntityResponseCollection>;
-  experience?: Maybe<ExperienceEntityResponse>;
-  experiences?: Maybe<ExperienceEntityResponseCollection>;
+  article?: Maybe<ArticleEntityResponse>;
+  articles?: Maybe<ArticleEntityResponseCollection>;
+  categories?: Maybe<CategoryEntityResponseCollection>;
+  category?: Maybe<CategoryEntityResponse>;
+  creator?: Maybe<CreatorEntityResponse>;
+  creators?: Maybe<CreatorEntityResponseCollection>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   me?: Maybe<UsersPermissionsMe>;
-  skill?: Maybe<SkillEntityResponse>;
-  skills?: Maybe<SkillEntityResponseCollection>;
+  subscriber?: Maybe<SubscriberEntityResponse>;
+  subscribers?: Maybe<SubscriberEntityResponseCollection>;
   tag?: Maybe<TagEntityResponse>;
   tags?: Maybe<TagEntityResponseCollection>;
-  testcontent?: Maybe<TestcontentEntityResponse>;
-  testcontents?: Maybe<TestcontentEntityResponseCollection>;
-  testimonial?: Maybe<TestimonialEntityResponse>;
-  testimonials?: Maybe<TestimonialEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
   uploadFiles?: Maybe<UploadFileEntityResponseCollection>;
   uploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -757,51 +737,40 @@ export type Query = {
   usersPermissionsRoles?: Maybe<UsersPermissionsRoleEntityResponseCollection>;
   usersPermissionsUser?: Maybe<UsersPermissionsUserEntityResponse>;
   usersPermissionsUsers?: Maybe<UsersPermissionsUserEntityResponseCollection>;
-  work?: Maybe<WorkEntityResponse>;
-  workExperience?: Maybe<WorkExperienceEntityResponse>;
-  workExperiences?: Maybe<WorkExperienceEntityResponseCollection>;
-  works?: Maybe<WorkEntityResponseCollection>;
 };
 
-export type QueryAboutArgs = {
+export type QueryArticleArgs = {
   id?: InputMaybe<Scalars['ID']>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
 };
 
-export type QueryAboutsArgs = {
-  filters?: InputMaybe<AboutFiltersInput>;
+export type QueryArticlesArgs = {
+  filters?: InputMaybe<ArticleFiltersInput>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-export type QueryBrandArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-export type QueryBrandsArgs = {
-  filters?: InputMaybe<BrandFiltersInput>;
+export type QueryCategoriesArgs = {
+  filters?: InputMaybe<CategoryFiltersInput>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-export type QueryContactArgs = {
+export type QueryCategoryArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
+};
+
+export type QueryCreatorArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
-export type QueryContactsArgs = {
-  filters?: InputMaybe<ContactFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type QueryExperienceArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-export type QueryExperiencesArgs = {
-  filters?: InputMaybe<ExperienceFiltersInput>;
+export type QueryCreatorsArgs = {
+  filters?: InputMaybe<CreatorFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -817,14 +786,13 @@ export type QueryI18NLocalesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-export type QuerySkillArgs = {
+export type QuerySubscriberArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
-export type QuerySkillsArgs = {
-  filters?: InputMaybe<SkillFiltersInput>;
+export type QuerySubscribersArgs = {
+  filters?: InputMaybe<SubscriberFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -834,28 +802,6 @@ export type QueryTagArgs = {
 
 export type QueryTagsArgs = {
   filters?: InputMaybe<TagFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type QueryTestcontentArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-export type QueryTestcontentsArgs = {
-  filters?: InputMaybe<TestcontentFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type QueryTestimonialArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-export type QueryTestimonialsArgs = {
-  filters?: InputMaybe<TestimonialFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -901,77 +847,9 @@ export type QueryUsersPermissionsUsersArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-export type QueryWorkArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-export type QueryWorkExperienceArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-export type QueryWorkExperiencesArgs = {
-  filters?: InputMaybe<WorkExperienceFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type QueryWorksArgs = {
-  filters?: InputMaybe<WorkFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
 export type ResponseCollectionMeta = {
   __typename?: 'ResponseCollectionMeta';
   pagination: Pagination;
-};
-
-export type Skill = {
-  __typename?: 'Skill';
-  BackgroundColor?: Maybe<Scalars['String']>;
-  ImageUrl?: Maybe<UploadFileEntityResponse>;
-  Name: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type SkillEntity = {
-  __typename?: 'SkillEntity';
-  attributes?: Maybe<Skill>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type SkillEntityResponse = {
-  __typename?: 'SkillEntityResponse';
-  data?: Maybe<SkillEntity>;
-};
-
-export type SkillEntityResponseCollection = {
-  __typename?: 'SkillEntityResponseCollection';
-  data: Array<SkillEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type SkillFiltersInput = {
-  BackgroundColor?: InputMaybe<StringFilterInput>;
-  Name?: InputMaybe<StringFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<SkillFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<SkillFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<SkillFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type SkillInput = {
-  BackgroundColor?: InputMaybe<Scalars['String']>;
-  ImageUrl?: InputMaybe<Scalars['ID']>;
-  Name?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type StringFilterInput = {
@@ -998,12 +876,58 @@ export type StringFilterInput = {
   startsWith?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscriber = {
+  __typename?: 'Subscriber';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  email?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type SubscriberEntity = {
+  __typename?: 'SubscriberEntity';
+  attributes?: Maybe<Subscriber>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type SubscriberEntityResponse = {
+  __typename?: 'SubscriberEntityResponse';
+  data?: Maybe<SubscriberEntity>;
+};
+
+export type SubscriberEntityResponseCollection = {
+  __typename?: 'SubscriberEntityResponseCollection';
+  data: Array<SubscriberEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type SubscriberFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<SubscriberFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  email?: InputMaybe<StringFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<SubscriberFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<SubscriberFiltersInput>>>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type SubscriberInput = {
+  email?: InputMaybe<Scalars['String']>;
+};
+
 export type Tag = {
   __typename?: 'Tag';
+  Articles?: Maybe<ArticleRelationResponseCollection>;
+  TagText: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   publishedAt?: Maybe<Scalars['DateTime']>;
-  tag: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type TagArticlesArgs = {
+  filters?: InputMaybe<ArticleFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type TagEntity = {
@@ -1024,114 +948,26 @@ export type TagEntityResponseCollection = {
 };
 
 export type TagFiltersInput = {
+  Articles?: InputMaybe<ArticleFiltersInput>;
+  TagText?: InputMaybe<StringFilterInput>;
   and?: InputMaybe<Array<InputMaybe<TagFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   not?: InputMaybe<TagFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<TagFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
-  tag?: InputMaybe<StringFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type TagInput = {
+  Articles?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  TagText?: InputMaybe<Scalars['String']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
-  tag?: InputMaybe<Scalars['String']>;
 };
 
 export type TagRelationResponseCollection = {
   __typename?: 'TagRelationResponseCollection';
   data: Array<TagEntity>;
-};
-
-export type Testcontent = {
-  __typename?: 'Testcontent';
-  content: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type TestcontentEntity = {
-  __typename?: 'TestcontentEntity';
-  attributes?: Maybe<Testcontent>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type TestcontentEntityResponse = {
-  __typename?: 'TestcontentEntityResponse';
-  data?: Maybe<TestcontentEntity>;
-};
-
-export type TestcontentEntityResponseCollection = {
-  __typename?: 'TestcontentEntityResponseCollection';
-  data: Array<TestcontentEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type TestcontentFiltersInput = {
-  and?: InputMaybe<Array<InputMaybe<TestcontentFiltersInput>>>;
-  content?: InputMaybe<StringFilterInput>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<TestcontentFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<TestcontentFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type TestcontentInput = {
-  content?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type Testimonial = {
-  __typename?: 'Testimonial';
-  Compagny?: Maybe<Scalars['String']>;
-  Feedback?: Maybe<Scalars['String']>;
-  ImageUrl?: Maybe<UploadFileEntityResponse>;
-  Name: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type TestimonialEntity = {
-  __typename?: 'TestimonialEntity';
-  attributes?: Maybe<Testimonial>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type TestimonialEntityResponse = {
-  __typename?: 'TestimonialEntityResponse';
-  data?: Maybe<TestimonialEntity>;
-};
-
-export type TestimonialEntityResponseCollection = {
-  __typename?: 'TestimonialEntityResponseCollection';
-  data: Array<TestimonialEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type TestimonialFiltersInput = {
-  Compagny?: InputMaybe<StringFilterInput>;
-  Feedback?: InputMaybe<StringFilterInput>;
-  Name?: InputMaybe<StringFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<TestimonialFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<TestimonialFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<TestimonialFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type TestimonialInput = {
-  Compagny?: InputMaybe<Scalars['String']>;
-  Feedback?: InputMaybe<Scalars['String']>;
-  ImageUrl?: InputMaybe<Scalars['ID']>;
-  Name?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type UploadFile = {
@@ -1503,159 +1339,9 @@ export type UsersPermissionsUserRelationResponseCollection = {
   data: Array<UsersPermissionsUserEntity>;
 };
 
-export type Work = {
-  __typename?: 'Work';
-  CodeLink?: Maybe<Scalars['String']>;
-  Description: Scalars['String'];
-  ImageUrl: UploadFileEntityResponse;
-  ProjectLink: Scalars['String'];
-  Title: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  tags?: Maybe<TagRelationResponseCollection>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type WorkTagsArgs = {
-  filters?: InputMaybe<TagFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type WorkEntity = {
-  __typename?: 'WorkEntity';
-  attributes?: Maybe<Work>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type WorkEntityResponse = {
-  __typename?: 'WorkEntityResponse';
-  data?: Maybe<WorkEntity>;
-};
-
-export type WorkEntityResponseCollection = {
-  __typename?: 'WorkEntityResponseCollection';
-  data: Array<WorkEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type WorkExperience = {
-  __typename?: 'WorkExperience';
-  Compagny?: Maybe<Scalars['String']>;
-  Description?: Maybe<Scalars['String']>;
-  Name: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type WorkExperienceEntity = {
-  __typename?: 'WorkExperienceEntity';
-  attributes?: Maybe<WorkExperience>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type WorkExperienceEntityResponse = {
-  __typename?: 'WorkExperienceEntityResponse';
-  data?: Maybe<WorkExperienceEntity>;
-};
-
-export type WorkExperienceEntityResponseCollection = {
-  __typename?: 'WorkExperienceEntityResponseCollection';
-  data: Array<WorkExperienceEntity>;
-  meta: ResponseCollectionMeta;
-};
-
-export type WorkExperienceFiltersInput = {
-  Compagny?: InputMaybe<StringFilterInput>;
-  Description?: InputMaybe<StringFilterInput>;
-  Name?: InputMaybe<StringFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<WorkExperienceFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<WorkExperienceFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<WorkExperienceFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type WorkExperienceInput = {
-  Compagny?: InputMaybe<Scalars['String']>;
-  Description?: InputMaybe<Scalars['String']>;
-  Name?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type WorkExperienceRelationResponseCollection = {
-  __typename?: 'WorkExperienceRelationResponseCollection';
-  data: Array<WorkExperienceEntity>;
-};
-
-export type WorkFiltersInput = {
-  CodeLink?: InputMaybe<StringFilterInput>;
-  Description?: InputMaybe<StringFilterInput>;
-  ProjectLink?: InputMaybe<StringFilterInput>;
-  Title?: InputMaybe<StringFilterInput>;
-  and?: InputMaybe<Array<InputMaybe<WorkFiltersInput>>>;
-  createdAt?: InputMaybe<DateTimeFilterInput>;
-  id?: InputMaybe<IdFilterInput>;
-  not?: InputMaybe<WorkFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<WorkFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
-  tags?: InputMaybe<TagFiltersInput>;
-  updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type WorkInput = {
-  CodeLink?: InputMaybe<Scalars['String']>;
-  Description?: InputMaybe<Scalars['String']>;
-  ImageUrl?: InputMaybe<Scalars['ID']>;
-  ProjectLink?: InputMaybe<Scalars['String']>;
-  Title?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-  tags?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-};
-
-export type GetOneAboutQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']>;
-}>;
-
-export type GetOneAboutQuery = {
-  __typename?: 'Query';
-  about?: {
-    __typename?: 'AboutEntityResponse';
-    data?: {
-      __typename?: 'AboutEntity';
-      id?: string | null;
-      attributes?: {
-        __typename?: 'About';
-        createdAt?: any | null;
-        updatedAt?: any | null;
-        Description?: string | null;
-        Title: string;
-        publishedAt?: any | null;
-        ImageUrl?: {
-          __typename?: 'UploadFileEntityResponse';
-          data?: {
-            __typename?: 'UploadFileEntity';
-            id?: string | null;
-            attributes?: {
-              __typename?: 'UploadFile';
-              url: string;
-              previewUrl?: string | null;
-              mime: string;
-              name: string;
-            } | null;
-          } | null;
-        } | null;
-      } | null;
-    } | null;
-  } | null;
-};
-
-export type GetAllAboutQueryVariables = Exact<{
-  filters?: InputMaybe<AboutFiltersInput>;
+export type GetAllArticlesQueryVariables = Exact<{
+  filters?: InputMaybe<ArticleFiltersInput>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<
@@ -1663,21 +1349,47 @@ export type GetAllAboutQueryVariables = Exact<{
   >;
 }>;
 
-export type GetAllAboutQuery = {
+export type GetAllArticlesQuery = {
   __typename?: 'Query';
-  abouts?: {
-    __typename?: 'AboutEntityResponseCollection';
+  articles?: {
+    __typename?: 'ArticleEntityResponseCollection';
     data: Array<{
-      __typename?: 'AboutEntity';
+      __typename?: 'ArticleEntity';
       id?: string | null;
       attributes?: {
-        __typename?: 'About';
-        createdAt?: any | null;
-        updatedAt?: any | null;
-        Description?: string | null;
+        __typename?: 'Article';
         Title: string;
-        publishedAt?: any | null;
-        ImageUrl?: {
+        Slug: string;
+        ViewsCount?: number | null;
+        Description: string;
+        createdAt?: any | null;
+        Content: string;
+        PublishedDate: any;
+        Creator?: {
+          __typename?: 'CreatorEntityResponse';
+          data?: {
+            __typename?: 'CreatorEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Creator';
+              CreatorName: string;
+              Bio: string;
+              CreatorImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    name: string;
+                    url: string;
+                  } | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+        } | null;
+        ArtImage: {
           __typename?: 'UploadFileEntityResponse';
           data?: {
             __typename?: 'UploadFileEntity';
@@ -1686,35 +1398,754 @@ export type GetAllAboutQuery = {
               __typename?: 'UploadFile';
               url: string;
               previewUrl?: string | null;
-              mime: string;
               name: string;
             } | null;
           } | null;
+        };
+        Tags?: {
+          __typename?: 'TagRelationResponseCollection';
+          data: Array<{
+            __typename?: 'TagEntity';
+            id?: string | null;
+            attributes?: { __typename?: 'Tag'; TagText: string } | null;
+          }>;
         } | null;
       } | null;
     }>;
   } | null;
 };
 
-export const GetOneAboutDocument = gql`
-  query getOneAbout($id: ID) {
-    about(id: $id) {
+export type GetOneArticleQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
+}>;
+
+export type GetOneArticleQuery = {
+  __typename?: 'Query';
+  article?: {
+    __typename?: 'ArticleEntityResponse';
+    data?: {
+      __typename?: 'ArticleEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Article';
+        Title: string;
+        Slug: string;
+        ViewsCount?: number | null;
+        Description: string;
+        createdAt?: any | null;
+        Content: string;
+        PublishedDate: any;
+        Creator?: {
+          __typename?: 'CreatorEntityResponse';
+          data?: {
+            __typename?: 'CreatorEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Creator';
+              CreatorName: string;
+              Bio: string;
+              CreatorImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    name: string;
+                    url: string;
+                  } | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+        } | null;
+        ArtImage: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              url: string;
+              previewUrl?: string | null;
+              name: string;
+            } | null;
+          } | null;
+        };
+        Tags?: {
+          __typename?: 'TagRelationResponseCollection';
+          data: Array<{
+            __typename?: 'TagEntity';
+            id?: string | null;
+            attributes?: { __typename?: 'Tag'; TagText: string } | null;
+          }>;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export type GetArticleBySlugQueryVariables = Exact<{
+  slug?: InputMaybe<StringFilterInput>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
+}>;
+
+export type GetArticleBySlugQuery = {
+  __typename?: 'Query';
+  articles?: {
+    __typename?: 'ArticleEntityResponseCollection';
+    data: Array<{
+      __typename?: 'ArticleEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Article';
+        Title: string;
+        Slug: string;
+        ViewsCount?: number | null;
+        Description: string;
+        createdAt?: any | null;
+        Content: string;
+        PublishedDate: any;
+        Creator?: {
+          __typename?: 'CreatorEntityResponse';
+          data?: {
+            __typename?: 'CreatorEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Creator';
+              CreatorName: string;
+              Bio: string;
+              CreatorImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    name: string;
+                    url: string;
+                  } | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+        } | null;
+        ArtImage: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              url: string;
+              previewUrl?: string | null;
+              name: string;
+            } | null;
+          } | null;
+        };
+        Tags?: {
+          __typename?: 'TagRelationResponseCollection';
+          data: Array<{
+            __typename?: 'TagEntity';
+            id?: string | null;
+            attributes?: { __typename?: 'Tag'; TagText: string } | null;
+          }>;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetAllCategoriesQueryVariables = Exact<{
+  filters?: InputMaybe<CategoryFiltersInput>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+}>;
+
+export type GetAllCategoriesQuery = {
+  __typename?: 'Query';
+  categories?: {
+    __typename?: 'CategoryEntityResponseCollection';
+    data: Array<{
+      __typename?: 'CategoryEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Category';
+        CategoryName: string;
+        locale?: string | null;
+        Description: string;
+        CatImage?: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              name: string;
+              ext?: string | null;
+              previewUrl?: string | null;
+              url: string;
+            } | null;
+          } | null;
+        } | null;
+        FeaturedArticle?: {
+          __typename?: 'ArticleEntityResponse';
+          data?: {
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          name: string;
+                          url: string;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        Articles?: {
+          __typename?: 'ArticleRelationResponseCollection';
+          data: Array<{
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          name: string;
+                          url: string;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          }>;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetOneCategoryQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+  locale?: InputMaybe<Scalars['I18NLocaleCode']>;
+}>;
+
+export type GetOneCategoryQuery = {
+  __typename?: 'Query';
+  category?: {
+    __typename?: 'CategoryEntityResponse';
+    data?: {
+      __typename?: 'CategoryEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Category';
+        CategoryName: string;
+        locale?: string | null;
+        Description: string;
+        CatImage?: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              name: string;
+              ext?: string | null;
+              previewUrl?: string | null;
+              url: string;
+            } | null;
+          } | null;
+        } | null;
+        FeaturedArticle?: {
+          __typename?: 'ArticleEntityResponse';
+          data?: {
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          name: string;
+                          url: string;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        Articles?: {
+          __typename?: 'ArticleRelationResponseCollection';
+          data: Array<{
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          name: string;
+                          url: string;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          }>;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export type GetCategoryBySlugQueryVariables = Exact<{
+  categoryName?: InputMaybe<StringFilterInput>;
+}>;
+
+export type GetCategoryBySlugQuery = {
+  __typename?: 'Query';
+  categories?: {
+    __typename?: 'CategoryEntityResponseCollection';
+    data: Array<{
+      __typename?: 'CategoryEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Category';
+        CategoryName: string;
+        locale?: string | null;
+        Description: string;
+        CatImage?: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              name: string;
+              ext?: string | null;
+              previewUrl?: string | null;
+              url: string;
+            } | null;
+          } | null;
+        } | null;
+        FeaturedArticle?: {
+          __typename?: 'ArticleEntityResponse';
+          data?: {
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          name: string;
+                          url: string;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        Articles?: {
+          __typename?: 'ArticleRelationResponseCollection';
+          data: Array<{
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          name: string;
+                          url: string;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          }>;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetAllTagsQueryVariables = Exact<{
+  filters?: InputMaybe<TagFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+}>;
+
+export type GetAllTagsQuery = {
+  __typename?: 'Query';
+  tags?: {
+    __typename?: 'TagEntityResponseCollection';
+    data: Array<{
+      __typename?: 'TagEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Tag';
+        TagText: string;
+        publishedAt?: any | null;
+        createdAt?: any | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetOneTagQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+}>;
+
+export type GetOneTagQuery = {
+  __typename?: 'Query';
+  tag?: {
+    __typename?: 'TagEntityResponse';
+    data?: {
+      __typename?: 'TagEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Tag';
+        TagText: string;
+        publishedAt?: any | null;
+        createdAt?: any | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export const GetAllArticlesDocument = gql`
+  query GetAllArticles(
+    $filters: ArticleFiltersInput
+    $locale: I18NLocaleCode
+    $pagination: PaginationArg = {}
+    $publicationState: PublicationState = LIVE
+    $sort: [String] = []
+  ) {
+    articles(
+      locale: $locale
+      filters: $filters
+      publicationState: $publicationState
+      sort: $sort
+      pagination: $pagination
+    ) {
       data {
         id
         attributes {
-          createdAt
-          updatedAt
-          Description
           Title
-          publishedAt
-          ImageUrl {
+          Slug
+          ViewsCount
+          Description
+          createdAt
+          Content
+          PublishedDate
+          Creator {
+            data {
+              id
+              attributes {
+                CreatorName
+                Bio
+                CreatorImage {
+                  data {
+                    id
+                    attributes {
+                      name
+                      url
+                    }
+                  }
+                }
+              }
+            }
+          }
+          ArtImage {
             data {
               id
               attributes {
                 url
                 previewUrl
-                mime
                 name
+              }
+            }
+          }
+          Tags {
+            data {
+              id
+              attributes {
+                TagText
               }
             }
           }
@@ -1723,18 +2154,838 @@ export const GetOneAboutDocument = gql`
     }
   }
 `;
-export type GetOneAboutQueryResult = Apollo.QueryResult<
-  GetOneAboutQuery,
-  GetOneAboutQueryVariables
+
+/**
+ * __useGetAllArticlesQuery__
+ *
+ * To run a query within a React component, call `useGetAllArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllArticlesQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      locale: // value for 'locale'
+ *      pagination: // value for 'pagination'
+ *      publicationState: // value for 'publicationState'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useGetAllArticlesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAllArticlesQuery,
+    GetAllArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAllArticlesQuery, GetAllArticlesQueryVariables>(
+    GetAllArticlesDocument,
+    options
+  );
+}
+
+export function useGetAllArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAllArticlesQuery,
+    GetAllArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAllArticlesQuery, GetAllArticlesQueryVariables>(
+    GetAllArticlesDocument,
+    options
+  );
+}
+
+export type GetAllArticlesQueryHookResult = ReturnType<
+  typeof useGetAllArticlesQuery
 >;
-export const GetAllAboutDocument = gql`
-  query getAllAbout(
-    $filters: AboutFiltersInput
+export type GetAllArticlesLazyQueryHookResult = ReturnType<
+  typeof useGetAllArticlesLazyQuery
+>;
+export type GetAllArticlesQueryResult = Apollo.QueryResult<
+  GetAllArticlesQuery,
+  GetAllArticlesQueryVariables
+>;
+export const GetOneArticleDocument = gql`
+  query GetOneArticle($id: ID, $locale: I18NLocaleCode) {
+    article(locale: $locale, id: $id) {
+      data {
+        id
+        attributes {
+          Title
+          Slug
+          ViewsCount
+          Description
+          createdAt
+          Content
+          PublishedDate
+          Creator {
+            data {
+              id
+              attributes {
+                CreatorName
+                Bio
+                CreatorImage {
+                  data {
+                    id
+                    attributes {
+                      name
+                      url
+                    }
+                  }
+                }
+              }
+            }
+          }
+          ArtImage {
+            data {
+              id
+              attributes {
+                url
+                previewUrl
+                name
+              }
+            }
+          }
+          Tags {
+            data {
+              id
+              attributes {
+                TagText
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetOneArticleQuery__
+ *
+ * To run a query within a React component, call `useGetOneArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneArticleQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useGetOneArticleQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetOneArticleQuery,
+    GetOneArticleQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOneArticleQuery, GetOneArticleQueryVariables>(
+    GetOneArticleDocument,
+    options
+  );
+}
+
+export function useGetOneArticleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneArticleQuery,
+    GetOneArticleQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetOneArticleQuery, GetOneArticleQueryVariables>(
+    GetOneArticleDocument,
+    options
+  );
+}
+
+export type GetOneArticleQueryHookResult = ReturnType<
+  typeof useGetOneArticleQuery
+>;
+export type GetOneArticleLazyQueryHookResult = ReturnType<
+  typeof useGetOneArticleLazyQuery
+>;
+export type GetOneArticleQueryResult = Apollo.QueryResult<
+  GetOneArticleQuery,
+  GetOneArticleQueryVariables
+>;
+export const GetArticleBySlugDocument = gql`
+  query GetArticleBySlug($slug: StringFilterInput, $locale: I18NLocaleCode) {
+    articles(locale: $locale, filters: { Slug: $slug }) {
+      data {
+        id
+        attributes {
+          Title
+          Slug
+          ViewsCount
+          Description
+          createdAt
+          Content
+          PublishedDate
+          Creator {
+            data {
+              id
+              attributes {
+                CreatorName
+                Bio
+                CreatorImage {
+                  data {
+                    id
+                    attributes {
+                      name
+                      url
+                    }
+                  }
+                }
+              }
+            }
+          }
+          ArtImage {
+            data {
+              id
+              attributes {
+                url
+                previewUrl
+                name
+              }
+            }
+          }
+          Tags {
+            data {
+              id
+              attributes {
+                TagText
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetArticleBySlugQuery__
+ *
+ * To run a query within a React component, call `useGetArticleBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetArticleBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetArticleBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useGetArticleBySlugQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetArticleBySlugQuery,
+    GetArticleBySlugQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetArticleBySlugQuery, GetArticleBySlugQueryVariables>(
+    GetArticleBySlugDocument,
+    options
+  );
+}
+
+export function useGetArticleBySlugLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetArticleBySlugQuery,
+    GetArticleBySlugQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetArticleBySlugQuery,
+    GetArticleBySlugQueryVariables
+  >(GetArticleBySlugDocument, options);
+}
+
+export type GetArticleBySlugQueryHookResult = ReturnType<
+  typeof useGetArticleBySlugQuery
+>;
+export type GetArticleBySlugLazyQueryHookResult = ReturnType<
+  typeof useGetArticleBySlugLazyQuery
+>;
+export type GetArticleBySlugQueryResult = Apollo.QueryResult<
+  GetArticleBySlugQuery,
+  GetArticleBySlugQueryVariables
+>;
+export const GetAllCategoriesDocument = gql`
+  query GetAllCategories(
+    $filters: CategoryFiltersInput
+    $locale: I18NLocaleCode
     $pagination: PaginationArg = {}
     $publicationState: PublicationState = LIVE
     $sort: [String] = []
   ) {
-    abouts(
+    categories(
+      pagination: $pagination
+      sort: $sort
+      publicationState: $publicationState
+      filters: $filters
+      locale: $locale
+    ) {
+      data {
+        id
+        attributes {
+          CategoryName
+          CatImage {
+            data {
+              id
+              attributes {
+                name
+                ext
+                previewUrl
+                url
+              }
+            }
+          }
+          locale
+          Description
+          FeaturedArticle {
+            data {
+              id
+              attributes {
+                Title
+                Slug
+                ViewsCount
+                Description
+                createdAt
+                Content
+                PublishedDate
+                Creator {
+                  data {
+                    id
+                    attributes {
+                      CreatorName
+                      Bio
+                      CreatorImage {
+                        data {
+                          id
+                          attributes {
+                            name
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ArtImage {
+                  data {
+                    id
+                    attributes {
+                      url
+                      previewUrl
+                      name
+                    }
+                  }
+                }
+                Tags {
+                  data {
+                    id
+                    attributes {
+                      TagText
+                    }
+                  }
+                }
+              }
+            }
+          }
+          Articles {
+            data {
+              id
+              attributes {
+                Title
+                Slug
+                ViewsCount
+                Description
+                createdAt
+                Content
+                PublishedDate
+                Creator {
+                  data {
+                    id
+                    attributes {
+                      CreatorName
+                      Bio
+                      CreatorImage {
+                        data {
+                          id
+                          attributes {
+                            name
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ArtImage {
+                  data {
+                    id
+                    attributes {
+                      url
+                      previewUrl
+                      name
+                    }
+                  }
+                }
+                Tags {
+                  data {
+                    id
+                    attributes {
+                      TagText
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetAllCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetAllCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllCategoriesQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      locale: // value for 'locale'
+ *      pagination: // value for 'pagination'
+ *      publicationState: // value for 'publicationState'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useGetAllCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAllCategoriesQuery,
+    GetAllCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(
+    GetAllCategoriesDocument,
+    options
+  );
+}
+
+export function useGetAllCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAllCategoriesQuery,
+    GetAllCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAllCategoriesQuery,
+    GetAllCategoriesQueryVariables
+  >(GetAllCategoriesDocument, options);
+}
+
+export type GetAllCategoriesQueryHookResult = ReturnType<
+  typeof useGetAllCategoriesQuery
+>;
+export type GetAllCategoriesLazyQueryHookResult = ReturnType<
+  typeof useGetAllCategoriesLazyQuery
+>;
+export type GetAllCategoriesQueryResult = Apollo.QueryResult<
+  GetAllCategoriesQuery,
+  GetAllCategoriesQueryVariables
+>;
+export const GetOneCategoryDocument = gql`
+  query GetOneCategory($id: ID, $locale: I18NLocaleCode) {
+    category(id: $id, locale: $locale) {
+      data {
+        id
+        attributes {
+          CategoryName
+          CatImage {
+            data {
+              id
+              attributes {
+                name
+                ext
+                previewUrl
+                url
+              }
+            }
+          }
+          locale
+          Description
+          FeaturedArticle {
+            data {
+              id
+              attributes {
+                Title
+                Slug
+                ViewsCount
+                Description
+                createdAt
+                Content
+                PublishedDate
+                Creator {
+                  data {
+                    id
+                    attributes {
+                      CreatorName
+                      Bio
+                      CreatorImage {
+                        data {
+                          id
+                          attributes {
+                            name
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ArtImage {
+                  data {
+                    id
+                    attributes {
+                      url
+                      previewUrl
+                      name
+                    }
+                  }
+                }
+                Tags {
+                  data {
+                    id
+                    attributes {
+                      TagText
+                    }
+                  }
+                }
+              }
+            }
+          }
+          Articles {
+            data {
+              id
+              attributes {
+                Title
+                Slug
+                ViewsCount
+                Description
+                createdAt
+                Content
+                PublishedDate
+                Creator {
+                  data {
+                    id
+                    attributes {
+                      CreatorName
+                      Bio
+                      CreatorImage {
+                        data {
+                          id
+                          attributes {
+                            name
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ArtImage {
+                  data {
+                    id
+                    attributes {
+                      url
+                      previewUrl
+                      name
+                    }
+                  }
+                }
+                Tags {
+                  data {
+                    id
+                    attributes {
+                      TagText
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetOneCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetOneCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneCategoryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useGetOneCategoryQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetOneCategoryQuery,
+    GetOneCategoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOneCategoryQuery, GetOneCategoryQueryVariables>(
+    GetOneCategoryDocument,
+    options
+  );
+}
+
+export function useGetOneCategoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneCategoryQuery,
+    GetOneCategoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetOneCategoryQuery, GetOneCategoryQueryVariables>(
+    GetOneCategoryDocument,
+    options
+  );
+}
+
+export type GetOneCategoryQueryHookResult = ReturnType<
+  typeof useGetOneCategoryQuery
+>;
+export type GetOneCategoryLazyQueryHookResult = ReturnType<
+  typeof useGetOneCategoryLazyQuery
+>;
+export type GetOneCategoryQueryResult = Apollo.QueryResult<
+  GetOneCategoryQuery,
+  GetOneCategoryQueryVariables
+>;
+export const GetCategoryBySlugDocument = gql`
+  query GetCategoryBySlug($categoryName: StringFilterInput) {
+    categories(filters: { CategoryName: $categoryName }) {
+      data {
+        id
+        attributes {
+          CategoryName
+          CatImage {
+            data {
+              id
+              attributes {
+                name
+                ext
+                previewUrl
+                url
+              }
+            }
+          }
+          locale
+          Description
+          FeaturedArticle {
+            data {
+              id
+              attributes {
+                Title
+                Slug
+                ViewsCount
+                Description
+                createdAt
+                Content
+                PublishedDate
+                Creator {
+                  data {
+                    id
+                    attributes {
+                      CreatorName
+                      Bio
+                      CreatorImage {
+                        data {
+                          id
+                          attributes {
+                            name
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ArtImage {
+                  data {
+                    id
+                    attributes {
+                      url
+                      previewUrl
+                      name
+                    }
+                  }
+                }
+                Tags {
+                  data {
+                    id
+                    attributes {
+                      TagText
+                    }
+                  }
+                }
+              }
+            }
+          }
+          Articles {
+            data {
+              id
+              attributes {
+                Title
+                Slug
+                ViewsCount
+                Description
+                createdAt
+                Content
+                PublishedDate
+                Creator {
+                  data {
+                    id
+                    attributes {
+                      CreatorName
+                      Bio
+                      CreatorImage {
+                        data {
+                          id
+                          attributes {
+                            name
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ArtImage {
+                  data {
+                    id
+                    attributes {
+                      url
+                      previewUrl
+                      name
+                    }
+                  }
+                }
+                Tags {
+                  data {
+                    id
+                    attributes {
+                      TagText
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetCategoryBySlugQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryBySlugQuery({
+ *   variables: {
+ *      categoryName: // value for 'categoryName'
+ *   },
+ * });
+ */
+export function useGetCategoryBySlugQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCategoryBySlugQuery,
+    GetCategoryBySlugQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCategoryBySlugQuery,
+    GetCategoryBySlugQueryVariables
+  >(GetCategoryBySlugDocument, options);
+}
+
+export function useGetCategoryBySlugLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCategoryBySlugQuery,
+    GetCategoryBySlugQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCategoryBySlugQuery,
+    GetCategoryBySlugQueryVariables
+  >(GetCategoryBySlugDocument, options);
+}
+
+export type GetCategoryBySlugQueryHookResult = ReturnType<
+  typeof useGetCategoryBySlugQuery
+>;
+export type GetCategoryBySlugLazyQueryHookResult = ReturnType<
+  typeof useGetCategoryBySlugLazyQuery
+>;
+export type GetCategoryBySlugQueryResult = Apollo.QueryResult<
+  GetCategoryBySlugQuery,
+  GetCategoryBySlugQueryVariables
+>;
+export const GetAllTagsDocument = gql`
+  query GetAllTags(
+    $filters: TagFiltersInput
+    $pagination: PaginationArg = {}
+    $publicationState: PublicationState = LIVE
+    $sort: [String] = []
+  ) {
+    tags(
       filters: $filters
       pagination: $pagination
       publicationState: $publicationState
@@ -1743,28 +2994,127 @@ export const GetAllAboutDocument = gql`
       data {
         id
         attributes {
-          createdAt
-          updatedAt
-          Description
-          Title
+          TagText
           publishedAt
-          ImageUrl {
-            data {
-              id
-              attributes {
-                url
-                previewUrl
-                mime
-                name
-              }
-            }
-          }
+          createdAt
         }
       }
     }
   }
 `;
-export type GetAllAboutQueryResult = Apollo.QueryResult<
-  GetAllAboutQuery,
-  GetAllAboutQueryVariables
+
+/**
+ * __useGetAllTagsQuery__
+ *
+ * To run a query within a React component, call `useGetAllTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllTagsQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      pagination: // value for 'pagination'
+ *      publicationState: // value for 'publicationState'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useGetAllTagsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAllTagsQuery,
+    GetAllTagsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(
+    GetAllTagsDocument,
+    options
+  );
+}
+
+export function useGetAllTagsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAllTagsQuery,
+    GetAllTagsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(
+    GetAllTagsDocument,
+    options
+  );
+}
+
+export type GetAllTagsQueryHookResult = ReturnType<typeof useGetAllTagsQuery>;
+export type GetAllTagsLazyQueryHookResult = ReturnType<
+  typeof useGetAllTagsLazyQuery
+>;
+export type GetAllTagsQueryResult = Apollo.QueryResult<
+  GetAllTagsQuery,
+  GetAllTagsQueryVariables
+>;
+export const GetOneTagDocument = gql`
+  query GetOneTag($id: ID) {
+    tag(id: $id) {
+      data {
+        id
+        attributes {
+          TagText
+          publishedAt
+          createdAt
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetOneTagQuery__
+ *
+ * To run a query within a React component, call `useGetOneTagQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneTagQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneTagQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOneTagQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetOneTagQuery, GetOneTagQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOneTagQuery, GetOneTagQueryVariables>(
+    GetOneTagDocument,
+    options
+  );
+}
+
+export function useGetOneTagLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneTagQuery,
+    GetOneTagQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetOneTagQuery, GetOneTagQueryVariables>(
+    GetOneTagDocument,
+    options
+  );
+}
+
+export type GetOneTagQueryHookResult = ReturnType<typeof useGetOneTagQuery>;
+export type GetOneTagLazyQueryHookResult = ReturnType<
+  typeof useGetOneTagLazyQuery
+>;
+export type GetOneTagQueryResult = Apollo.QueryResult<
+  GetOneTagQuery,
+  GetOneTagQueryVariables
 >;

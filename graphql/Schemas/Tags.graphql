@@ -1,0 +1,25 @@
+query GetAllTags($filters: TagFiltersInput, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []){
+  tags(filters: $filters, pagination: $pagination, publicationState: $publicationState, sort: $sort){
+    data {
+      id
+      attributes {
+        TagText
+        publishedAt
+        createdAt
+      }
+    }
+  }
+}
+
+query GetOneTag($id: ID){
+  tag(id: $id){
+    data {
+      id
+      attributes {
+        TagText
+        publishedAt
+        createdAt
+      }
+    }
+  }
+}

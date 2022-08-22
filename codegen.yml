@@ -9,7 +9,7 @@ generates:
       - "typescript-react-apollo"
     config:
       reactApolloVersion: 3
-      withHooks: false
+      withHooks: true
       withHOC: false
       withComponent: false
       exportFragmentSpreadSubTypes: true
@@ -19,7 +19,7 @@ generates:
       documentMode: external
       importDocumentNodeExternallyFrom: ./graphqlTypes
       reactApolloVersion: 3
-      withHooks: true
+      withHooks: false
       contextType: "ApolloClientContext"
       contextTypeRequired: true
       # withHOC: false

@@ -1,0 +1,159 @@
+query GetAllArticles($filters: ArticleFiltersInput, $locale: I18NLocaleCode, $pagination: PaginationArg = {}, $publicationState: PublicationState = LIVE, $sort: [String] = []){
+  articles(locale: $locale, filters: $filters, publicationState: $publicationState, sort: $sort, pagination: $pagination){
+    data {
+      id
+      attributes {
+        Title
+        Slug
+        ViewsCount
+        Description
+        createdAt
+        Content
+        PublishedDate
+        Creator {
+          data {
+            id
+            attributes {
+              CreatorName
+              Bio
+              CreatorImage {
+                data {
+                  id
+                  attributes {
+                    name
+                    url
+                  }
+                }
+              }
+            }
+          }
+        }
+        ArtImage {
+          data {
+            id
+            attributes {
+              url
+              previewUrl
+              name
+            }
+          }
+        }
+        Tags{
+          data {
+            id
+            attributes {
+              TagText
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetOneArticle($id: ID, $locale: I18NLocaleCode){
+  article(locale: $locale, id: $id){
+    data {
+      id
+      attributes {
+        Title
+        Slug
+        ViewsCount
+        Description
+        createdAt
+        Content
+        PublishedDate
+        Creator {
+          data {
+            id
+            attributes {
+              CreatorName
+              Bio
+              CreatorImage {
+                data {
+                  id
+                  attributes {
+                    name
+                    url
+                  }
+                }
+              }
+            }
+          }
+        }
+        ArtImage {
+          data {
+            id
+            attributes {
+              url
+              previewUrl
+              name
+            }
+          }
+        }
+        Tags{
+          data {
+            id
+            attributes {
+              TagText
+            }
+          }
+        }
+      }
+    }
+  }
+}
+query GetArticleBySlug($slug: StringFilterInput, $locale: I18NLocaleCode){
+  articles(locale: $locale, filters: {Slug: $slug}){
+    data {
+      id
+      attributes {
+        Title
+        Slug
+        ViewsCount
+        Description
+        createdAt
+        Content
+        PublishedDate
+        Creator {
+          data {
+            id
+            attributes {
+              CreatorName
+              Bio
+              CreatorImage {
+                data {
+                  id
+                  attributes {
+                    name
+                    url
+                  }
+                }
+              }
+            }
+          }
+        }
+        ArtImage {
+          data {
+            id
+            attributes {
+              url
+              previewUrl
+              name
+            }
+          }
+        }
+        Tags{
+          data {
+            id
+            attributes {
+              TagText
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+

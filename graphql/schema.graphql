@@ -5,95 +5,95 @@ schema {
   mutation: Mutation
 }
 
-union GenericMorph = About | Brand | Contact | Experience | I18NLocale | Skill | Tag | Testcontent | Testimonial | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Work | WorkExperience
+union GenericMorph = Article | Category | Creator | I18NLocale | Subscriber | Tag | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser
 
-type About {
-  Description: String
-  ImageUrl: UploadFileEntityResponse
+type Article {
+  ArtImage: UploadFileEntityResponse!
+  Category: CategoryEntityResponse
+  Content: String!
+  Creator: CreatorEntityResponse
+  Description: String!
+  PublishedDate: Date!
+  Slug: String!
+  Tags(filters: TagFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): TagRelationResponseCollection
   Title: String!
+  ViewsCount: Int
   createdAt: DateTime
+  locale: String
+  localizations(filters: ArticleFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): ArticleRelationResponseCollection
   publishedAt: DateTime
   updatedAt: DateTime
 }
 
-type AboutEntity {
-  attributes: About
+type ArticleEntity {
+  attributes: Article
   id: ID
 }
 
-type AboutEntityResponse {
-  data: AboutEntity
+type ArticleEntityResponse {
+  data: ArticleEntity
 }
 
-type AboutEntityResponseCollection {
-  data: [AboutEntity!]!
+type ArticleEntityResponseCollection {
+  data: [ArticleEntity!]!
   meta: ResponseCollectionMeta!
 }
 
-type Brand {
-  ImageUrl: UploadFileEntityResponse
-  Name: String
+type ArticleRelationResponseCollection {
+  data: [ArticleEntity!]!
+}
+
+type Category {
+  Articles(filters: ArticleFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): ArticleRelationResponseCollection
+  CatImage: UploadFileEntityResponse
+  CategoryName: String!
+  Description: String!
+  FeaturedArticle: ArticleEntityResponse
   createdAt: DateTime
+  locale: String
+  localizations(filters: CategoryFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): CategoryRelationResponseCollection
   publishedAt: DateTime
   updatedAt: DateTime
 }
 
-type BrandEntity {
-  attributes: Brand
+type CategoryEntity {
+  attributes: Category
   id: ID
 }
 
-type BrandEntityResponse {
-  data: BrandEntity
+type CategoryEntityResponse {
+  data: CategoryEntity
 }
 
-type BrandEntityResponseCollection {
-  data: [BrandEntity!]!
+type CategoryEntityResponseCollection {
+  data: [CategoryEntity!]!
   meta: ResponseCollectionMeta!
 }
 
-type Contact {
-  Email: String!
-  Message: String!
-  createdAt: DateTime
-  name: String!
-  publishedAt: DateTime
-  updatedAt: DateTime
+type CategoryRelationResponseCollection {
+  data: [CategoryEntity!]!
 }
 
-type ContactEntity {
-  attributes: Contact
-  id: ID
-}
-
-type ContactEntityResponse {
-  data: ContactEntity
-}
-
-type ContactEntityResponseCollection {
-  data: [ContactEntity!]!
-  meta: ResponseCollectionMeta!
-}
-
-type Experience {
-  Year: Int!
+type Creator {
+  Bio: String!
+  CreatorImage: UploadFileEntityResponse!
+  CreatorName: String!
   createdAt: DateTime
   publishedAt: DateTime
   updatedAt: DateTime
-  work_experiences(filters: WorkExperienceFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): WorkExperienceRelationResponseCollection
 }
 
-type ExperienceEntity {
-  attributes: Experience
+type CreatorEntity {
+  attributes: Creator
   id: ID
 }
 
-type ExperienceEntityResponse {
-  data: ExperienceEntity
+type CreatorEntityResponse {
+  data: CreatorEntity
 }
 
-type ExperienceEntityResponseCollection {
-  data: [ExperienceEntity!]!
+type CreatorEntityResponseCollection {
+  data: [CreatorEntity!]!
   meta: ResponseCollectionMeta!
 }
 
@@ -119,38 +119,30 @@ type I18NLocaleEntityResponseCollection {
 }
 
 type Mutation {
-  createAbout(data: AboutInput!): AboutEntityResponse
-  createBrand(data: BrandInput!): BrandEntityResponse
-  createContact(data: ContactInput!): ContactEntityResponse
-  createExperience(data: ExperienceInput!): ExperienceEntityResponse
-  createSkill(data: SkillInput!): SkillEntityResponse
+  createArticle(data: ArticleInput!, locale: I18NLocaleCode): ArticleEntityResponse
+  createArticleLocalization(data: ArticleInput, id: ID, locale: I18NLocaleCode): ArticleEntityResponse
+  createCategory(data: CategoryInput!, locale: I18NLocaleCode): CategoryEntityResponse
+  createCategoryLocalization(data: CategoryInput, id: ID, locale: I18NLocaleCode): CategoryEntityResponse
+  createCreator(data: CreatorInput!): CreatorEntityResponse
+  createSubscriber(data: SubscriberInput!): SubscriberEntityResponse
   createTag(data: TagInput!): TagEntityResponse
-  createTestcontent(data: TestcontentInput!): TestcontentEntityResponse
-  createTestimonial(data: TestimonialInput!): TestimonialEntityResponse
   createUploadFile(data: UploadFileInput!): UploadFileEntityResponse
   createUploadFolder(data: UploadFolderInput!): UploadFolderEntityResponse
   "Create a new role"
   createUsersPermissionsRole(data: UsersPermissionsRoleInput!): UsersPermissionsCreateRolePayload
   "Create a new user"
   createUsersPermissionsUser(data: UsersPermissionsUserInput!): UsersPermissionsUserEntityResponse!
-  createWork(data: WorkInput!): WorkEntityResponse
-  createWorkExperience(data: WorkExperienceInput!): WorkExperienceEntityResponse
-  deleteAbout(id: ID!): AboutEntityResponse
-  deleteBrand(id: ID!): BrandEntityResponse
-  deleteContact(id: ID!): ContactEntityResponse
-  deleteExperience(id: ID!): ExperienceEntityResponse
-  deleteSkill(id: ID!): SkillEntityResponse
+  deleteArticle(id: ID!, locale: I18NLocaleCode): ArticleEntityResponse
+  deleteCategory(id: ID!, locale: I18NLocaleCode): CategoryEntityResponse
+  deleteCreator(id: ID!): CreatorEntityResponse
+  deleteSubscriber(id: ID!): SubscriberEntityResponse
   deleteTag(id: ID!): TagEntityResponse
-  deleteTestcontent(id: ID!): TestcontentEntityResponse
-  deleteTestimonial(id: ID!): TestimonialEntityResponse
   deleteUploadFile(id: ID!): UploadFileEntityResponse
   deleteUploadFolder(id: ID!): UploadFolderEntityResponse
   "Delete an existing role"
   deleteUsersPermissionsRole(id: ID!): UsersPermissionsDeleteRolePayload
   "Delete an existing user"
   deleteUsersPermissionsUser(id: ID!): UsersPermissionsUserEntityResponse!
-  deleteWork(id: ID!): WorkEntityResponse
-  deleteWorkExperience(id: ID!): WorkExperienceEntityResponse
   "Confirm an email users email address"
   emailConfirmation(confirmation: String!): UsersPermissionsLoginPayload
   "Request a reset password token"
@@ -162,23 +154,18 @@ type Mutation {
   removeFile(id: ID!): UploadFileEntityResponse
   "Reset user password. Confirm with a code (resetToken from forgotPassword)"
   resetPassword(code: String!, password: String!, passwordConfirmation: String!): UsersPermissionsLoginPayload
-  updateAbout(data: AboutInput!, id: ID!): AboutEntityResponse
-  updateBrand(data: BrandInput!, id: ID!): BrandEntityResponse
-  updateContact(data: ContactInput!, id: ID!): ContactEntityResponse
-  updateExperience(data: ExperienceInput!, id: ID!): ExperienceEntityResponse
+  updateArticle(data: ArticleInput!, id: ID!, locale: I18NLocaleCode): ArticleEntityResponse
+  updateCategory(data: CategoryInput!, id: ID!, locale: I18NLocaleCode): CategoryEntityResponse
+  updateCreator(data: CreatorInput!, id: ID!): CreatorEntityResponse
   updateFileInfo(id: ID!, info: FileInfoInput): UploadFileEntityResponse!
-  updateSkill(data: SkillInput!, id: ID!): SkillEntityResponse
+  updateSubscriber(data: SubscriberInput!, id: ID!): SubscriberEntityResponse
   updateTag(data: TagInput!, id: ID!): TagEntityResponse
-  updateTestcontent(data: TestcontentInput!, id: ID!): TestcontentEntityResponse
-  updateTestimonial(data: TestimonialInput!, id: ID!): TestimonialEntityResponse
   updateUploadFile(data: UploadFileInput!, id: ID!): UploadFileEntityResponse
   updateUploadFolder(data: UploadFolderInput!, id: ID!): UploadFolderEntityResponse
   "Update an existing role"
   updateUsersPermissionsRole(data: UsersPermissionsRoleInput!, id: ID!): UsersPermissionsUpdateRolePayload
   "Update an existing user"
   updateUsersPermissionsUser(data: UsersPermissionsUserInput!, id: ID!): UsersPermissionsUserEntityResponse!
-  updateWork(data: WorkInput!, id: ID!): WorkEntityResponse
-  updateWorkExperience(data: WorkExperienceInput!, id: ID!): WorkExperienceEntityResponse
   upload(field: String, file: Upload!, info: FileInfoInput, ref: String, refId: ID): UploadFileEntityResponse!
 }
 
@@ -190,25 +177,19 @@ type Pagination {
 }
 
 type Query {
-  about(id: ID): AboutEntityResponse
-  abouts(filters: AboutFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): AboutEntityResponseCollection
-  brand(id: ID): BrandEntityResponse
-  brands(filters: BrandFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): BrandEntityResponseCollection
-  contact(id: ID): ContactEntityResponse
-  contacts(filters: ContactFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): ContactEntityResponseCollection
-  experience(id: ID): ExperienceEntityResponse
-  experiences(filters: ExperienceFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): ExperienceEntityResponseCollection
+  article(id: ID, locale: I18NLocaleCode): ArticleEntityResponse
+  articles(filters: ArticleFiltersInput, locale: I18NLocaleCode, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): ArticleEntityResponseCollection
+  categories(filters: CategoryFiltersInput, locale: I18NLocaleCode, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): CategoryEntityResponseCollection
+  category(id: ID, locale: I18NLocaleCode): CategoryEntityResponse
+  creator(id: ID): CreatorEntityResponse
+  creators(filters: CreatorFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): CreatorEntityResponseCollection
   i18NLocale(id: ID): I18NLocaleEntityResponse
   i18NLocales(filters: I18NLocaleFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): I18NLocaleEntityResponseCollection
   me: UsersPermissionsMe
-  skill(id: ID): SkillEntityResponse
-  skills(filters: SkillFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): SkillEntityResponseCollection
+  subscriber(id: ID): SubscriberEntityResponse
+  subscribers(filters: SubscriberFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): SubscriberEntityResponseCollection
   tag(id: ID): TagEntityResponse
   tags(filters: TagFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): TagEntityResponseCollection
-  testcontent(id: ID): TestcontentEntityResponse
-  testcontents(filters: TestcontentFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): TestcontentEntityResponseCollection
-  testimonial(id: ID): TestimonialEntityResponse
-  testimonials(filters: TestimonialFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): TestimonialEntityResponseCollection
   uploadFile(id: ID): UploadFileEntityResponse
   uploadFiles(filters: UploadFileFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): UploadFileEntityResponseCollection
   uploadFolder(id: ID): UploadFolderEntityResponse
@@ -217,43 +198,37 @@ type Query {
   usersPermissionsRoles(filters: UsersPermissionsRoleFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): UsersPermissionsRoleEntityResponseCollection
   usersPermissionsUser(id: ID): UsersPermissionsUserEntityResponse
   usersPermissionsUsers(filters: UsersPermissionsUserFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): UsersPermissionsUserEntityResponseCollection
-  work(id: ID): WorkEntityResponse
-  workExperience(id: ID): WorkExperienceEntityResponse
-  workExperiences(filters: WorkExperienceFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): WorkExperienceEntityResponseCollection
-  works(filters: WorkFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): WorkEntityResponseCollection
 }
 
 type ResponseCollectionMeta {
   pagination: Pagination!
 }
 
-type Skill {
-  BackgroundColor: String
-  ImageUrl: UploadFileEntityResponse
-  Name: String!
+type Subscriber {
   createdAt: DateTime
-  publishedAt: DateTime
+  email: String
   updatedAt: DateTime
 }
 
-type SkillEntity {
-  attributes: Skill
+type SubscriberEntity {
+  attributes: Subscriber
   id: ID
 }
 
-type SkillEntityResponse {
-  data: SkillEntity
+type SubscriberEntityResponse {
+  data: SubscriberEntity
 }
 
-type SkillEntityResponseCollection {
-  data: [SkillEntity!]!
+type SubscriberEntityResponseCollection {
+  data: [SubscriberEntity!]!
   meta: ResponseCollectionMeta!
 }
 
 type Tag {
+  Articles(filters: ArticleFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): ArticleRelationResponseCollection
+  TagText: String!
   createdAt: DateTime
   publishedAt: DateTime
-  tag: String!
   updatedAt: DateTime
 }
 
@@ -273,51 +248,6 @@ type TagEntityResponseCollection {
 
 type TagRelationResponseCollection {
   data: [TagEntity!]!
-}
-
-type Testcontent {
-  content: String!
-  createdAt: DateTime
-  publishedAt: DateTime
-  updatedAt: DateTime
-}
-
-type TestcontentEntity {
-  attributes: Testcontent
-  id: ID
-}
-
-type TestcontentEntityResponse {
-  data: TestcontentEntity
-}
-
-type TestcontentEntityResponseCollection {
-  data: [TestcontentEntity!]!
-  meta: ResponseCollectionMeta!
-}
-
-type Testimonial {
-  Compagny: String
-  Feedback: String
-  ImageUrl: UploadFileEntityResponse
-  Name: String!
-  createdAt: DateTime
-  publishedAt: DateTime
-  updatedAt: DateTime
-}
-
-type TestimonialEntity {
-  attributes: Testimonial
-  id: ID
-}
-
-type TestimonialEntityResponse {
-  data: TestimonialEntity
-}
-
-type TestimonialEntityResponseCollection {
-  data: [TestimonialEntity!]!
-  meta: ResponseCollectionMeta!
 }
 
 type UploadFile {
@@ -493,66 +423,19 @@ type UsersPermissionsUserRelationResponseCollection {
   data: [UsersPermissionsUserEntity!]!
 }
 
-type Work {
-  CodeLink: String
-  Description: String!
-  ImageUrl: UploadFileEntityResponse!
-  ProjectLink: String!
-  Title: String!
-  createdAt: DateTime
-  publishedAt: DateTime
-  tags(filters: TagFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): TagRelationResponseCollection
-  updatedAt: DateTime
-}
-
-type WorkEntity {
-  attributes: Work
-  id: ID
-}
-
-type WorkEntityResponse {
-  data: WorkEntity
-}
-
-type WorkEntityResponseCollection {
-  data: [WorkEntity!]!
-  meta: ResponseCollectionMeta!
-}
-
-type WorkExperience {
-  Compagny: String
-  Description: String
-  Name: String!
-  createdAt: DateTime
-  publishedAt: DateTime
-  updatedAt: DateTime
-}
-
-type WorkExperienceEntity {
-  attributes: WorkExperience
-  id: ID
-}
-
-type WorkExperienceEntityResponse {
-  data: WorkExperienceEntity
-}
-
-type WorkExperienceEntityResponseCollection {
-  data: [WorkExperienceEntity!]!
-  meta: ResponseCollectionMeta!
-}
-
-type WorkExperienceRelationResponseCollection {
-  data: [WorkExperienceEntity!]!
-}
-
 enum PublicationState {
   LIVE
   PREVIEW
 }
 
+"A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."
+scalar Date
+
 "A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."
 scalar DateTime
+
+"A string used to identify an i18n locale"
+scalar I18NLocaleCode
 
 "The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
 scalar JSON
@@ -560,22 +443,38 @@ scalar JSON
 "The `Upload` scalar type represents a file upload."
 scalar Upload
 
-input AboutFiltersInput {
+input ArticleFiltersInput {
+  Category: CategoryFiltersInput
+  Content: StringFilterInput
+  Creator: CreatorFiltersInput
   Description: StringFilterInput
+  PublishedDate: DateFilterInput
+  Slug: StringFilterInput
+  Tags: TagFiltersInput
   Title: StringFilterInput
-  and: [AboutFiltersInput]
+  ViewsCount: IntFilterInput
+  and: [ArticleFiltersInput]
   createdAt: DateTimeFilterInput
   id: IDFilterInput
-  not: AboutFiltersInput
-  or: [AboutFiltersInput]
+  locale: StringFilterInput
+  localizations: ArticleFiltersInput
+  not: ArticleFiltersInput
+  or: [ArticleFiltersInput]
   publishedAt: DateTimeFilterInput
   updatedAt: DateTimeFilterInput
 }
 
-input AboutInput {
+input ArticleInput {
+  ArtImage: ID
+  Category: ID
+  Content: String
+  Creator: ID
   Description: String
-  ImageUrl: ID
+  PublishedDate: Date
+  Slug: String
+  Tags: [ID]
   Title: String
+  ViewsCount: Int
   publishedAt: DateTime
 }
 
@@ -603,41 +502,72 @@ input BooleanFilterInput {
   startsWith: Boolean
 }
 
-input BrandFiltersInput {
-  Name: StringFilterInput
-  and: [BrandFiltersInput]
+input CategoryFiltersInput {
+  Articles: ArticleFiltersInput
+  CategoryName: StringFilterInput
+  Description: StringFilterInput
+  FeaturedArticle: ArticleFiltersInput
+  and: [CategoryFiltersInput]
   createdAt: DateTimeFilterInput
   id: IDFilterInput
-  not: BrandFiltersInput
-  or: [BrandFiltersInput]
+  locale: StringFilterInput
+  localizations: CategoryFiltersInput
+  not: CategoryFiltersInput
+  or: [CategoryFiltersInput]
   publishedAt: DateTimeFilterInput
   updatedAt: DateTimeFilterInput
 }
 
-input BrandInput {
-  ImageUrl: ID
-  Name: String
+input CategoryInput {
+  Articles: [ID]
+  CatImage: ID
+  CategoryName: String
+  Description: String
+  FeaturedArticle: ID
   publishedAt: DateTime
 }
 
-input ContactFiltersInput {
-  Email: StringFilterInput
-  Message: StringFilterInput
-  and: [ContactFiltersInput]
+input CreatorFiltersInput {
+  Bio: StringFilterInput
+  CreatorName: StringFilterInput
+  and: [CreatorFiltersInput]
   createdAt: DateTimeFilterInput
   id: IDFilterInput
-  name: StringFilterInput
-  not: ContactFiltersInput
-  or: [ContactFiltersInput]
+  not: CreatorFiltersInput
+  or: [CreatorFiltersInput]
   publishedAt: DateTimeFilterInput
   updatedAt: DateTimeFilterInput
 }
 
-input ContactInput {
-  Email: String
-  Message: String
-  name: String
+input CreatorInput {
+  Bio: String
+  CreatorImage: ID
+  CreatorName: String
   publishedAt: DateTime
+}
+
+input DateFilterInput {
+  and: [Date]
+  between: [Date]
+  contains: Date
+  containsi: Date
+  endsWith: Date
+  eq: Date
+  eqi: Date
+  gt: Date
+  gte: Date
+  in: [Date]
+  lt: Date
+  lte: Date
+  ne: Date
+  not: DateFilterInput
+  notContains: Date
+  notContainsi: Date
+  notIn: [Date]
+  notNull: Boolean
+  null: Boolean
+  or: [Date]
+  startsWith: Date
 }
 
 input DateTimeFilterInput {
@@ -662,24 +592,6 @@ input DateTimeFilterInput {
   null: Boolean
   or: [DateTime]
   startsWith: DateTime
-}
-
-input ExperienceFiltersInput {
-  Year: IntFilterInput
-  and: [ExperienceFiltersInput]
-  createdAt: DateTimeFilterInput
-  id: IDFilterInput
-  not: ExperienceFiltersInput
-  or: [ExperienceFiltersInput]
-  publishedAt: DateTimeFilterInput
-  updatedAt: DateTimeFilterInput
-  work_experiences: WorkExperienceFiltersInput
-}
-
-input ExperienceInput {
-  Year: Int
-  publishedAt: DateTime
-  work_experiences: [ID]
 }
 
 input FileInfoInput {
@@ -802,25 +714,6 @@ input PaginationArg {
   start: Int
 }
 
-input SkillFiltersInput {
-  BackgroundColor: StringFilterInput
-  Name: StringFilterInput
-  and: [SkillFiltersInput]
-  createdAt: DateTimeFilterInput
-  id: IDFilterInput
-  not: SkillFiltersInput
-  or: [SkillFiltersInput]
-  publishedAt: DateTimeFilterInput
-  updatedAt: DateTimeFilterInput
-}
-
-input SkillInput {
-  BackgroundColor: String
-  ImageUrl: ID
-  Name: String
-  publishedAt: DateTime
-}
-
 input StringFilterInput {
   and: [String]
   between: [String]
@@ -845,56 +738,35 @@ input StringFilterInput {
   startsWith: String
 }
 
+input SubscriberFiltersInput {
+  and: [SubscriberFiltersInput]
+  createdAt: DateTimeFilterInput
+  email: StringFilterInput
+  id: IDFilterInput
+  not: SubscriberFiltersInput
+  or: [SubscriberFiltersInput]
+  updatedAt: DateTimeFilterInput
+}
+
+input SubscriberInput {
+  email: String
+}
+
 input TagFiltersInput {
+  Articles: ArticleFiltersInput
+  TagText: StringFilterInput
   and: [TagFiltersInput]
   createdAt: DateTimeFilterInput
   id: IDFilterInput
   not: TagFiltersInput
   or: [TagFiltersInput]
   publishedAt: DateTimeFilterInput
-  tag: StringFilterInput
   updatedAt: DateTimeFilterInput
 }
 
 input TagInput {
-  publishedAt: DateTime
-  tag: String
-}
-
-input TestcontentFiltersInput {
-  and: [TestcontentFiltersInput]
-  content: StringFilterInput
-  createdAt: DateTimeFilterInput
-  id: IDFilterInput
-  not: TestcontentFiltersInput
-  or: [TestcontentFiltersInput]
-  publishedAt: DateTimeFilterInput
-  updatedAt: DateTimeFilterInput
-}
-
-input TestcontentInput {
-  content: String
-  publishedAt: DateTime
-}
-
-input TestimonialFiltersInput {
-  Compagny: StringFilterInput
-  Feedback: StringFilterInput
-  Name: StringFilterInput
-  and: [TestimonialFiltersInput]
-  createdAt: DateTimeFilterInput
-  id: IDFilterInput
-  not: TestimonialFiltersInput
-  or: [TestimonialFiltersInput]
-  publishedAt: DateTimeFilterInput
-  updatedAt: DateTimeFilterInput
-}
-
-input TestimonialInput {
-  Compagny: String
-  Feedback: String
-  ImageUrl: ID
-  Name: String
+  Articles: [ID]
+  TagText: String
   publishedAt: DateTime
 }
 
@@ -1039,49 +911,4 @@ input UsersPermissionsUserInput {
   resetPasswordToken: String
   role: ID
   username: String
-}
-
-input WorkExperienceFiltersInput {
-  Compagny: StringFilterInput
-  Description: StringFilterInput
-  Name: StringFilterInput
-  and: [WorkExperienceFiltersInput]
-  createdAt: DateTimeFilterInput
-  id: IDFilterInput
-  not: WorkExperienceFiltersInput
-  or: [WorkExperienceFiltersInput]
-  publishedAt: DateTimeFilterInput
-  updatedAt: DateTimeFilterInput
-}
-
-input WorkExperienceInput {
-  Compagny: String
-  Description: String
-  Name: String
-  publishedAt: DateTime
-}
-
-input WorkFiltersInput {
-  CodeLink: StringFilterInput
-  Description: StringFilterInput
-  ProjectLink: StringFilterInput
-  Title: StringFilterInput
-  and: [WorkFiltersInput]
-  createdAt: DateTimeFilterInput
-  id: IDFilterInput
-  not: WorkFiltersInput
-  or: [WorkFiltersInput]
-  publishedAt: DateTimeFilterInput
-  tags: TagFiltersInput
-  updatedAt: DateTimeFilterInput
-}
-
-input WorkInput {
-  CodeLink: String
-  Description: String
-  ImageUrl: ID
-  ProjectLink: String
-  Title: String
-  publishedAt: DateTime
-  tags: [ID]
 }
