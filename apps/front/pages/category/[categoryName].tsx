@@ -2,6 +2,7 @@ import { GetServerSideProps, GetStaticPaths } from 'next';
 import { PageGetCategoryBySlugComp, ssrGetAllCategories, ssrGetCategoryBySlug } from '@next-template-nx/data';
 import { withApollo } from '@next-template-nx/utils';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const CategoryPage: PageGetCategoryBySlugComp = ({ data, error }) => {
   const { attributes } = data.categories.data[0];
@@ -9,19 +10,31 @@ const CategoryPage: PageGetCategoryBySlugComp = ({ data, error }) => {
   return (
     <div className={''}>
       <section
-        className={'mt-12 grid grid-cols-2  p-4 rounded-md transition-all duration-200 hover:shadow-2xl'}
+        className={
+          'mt-12 grid grid-cols-1 lg:grid-cols-2  p-4 rounded-md transition-all duration-200 hover:shadow-2xl'
+        }
       >
-        <div className={'bg-teal-600'}></div>
-        <div className={'bg-gray-100 px-12 py-6 flex flex-col justify-between items-start'}>
+        <Image
+          src={`${attributes.FeaturedArticle.data.attributes.ArtImage.data.attributes.url}`}
+          width={750}
+          height={300}
+          alt={attributes.FeaturedArticle.data.attributes.Title}
+          objectFit="cover"
+          style={{ maxWidth: '480px' }}
+        />
+
+        <div className={'bg-gray-100 px-4 md:px-12 py-6 flex flex-col justify-between items-start'}>
           <Link href={`/article/${attributes.FeaturedArticle.data.attributes.Slug}`}>
-            <h2 className={'text-2xl font-bold text-slate-700 cursor-pointer'}>
+            <h2 className={'text-xl md:text-2xl font-bold text-slate-700 cursor-pointer'}>
               {attributes.FeaturedArticle.data.attributes.Title}
             </h2>
           </Link>
           <p
             className={' text-slate-700'}
           >{`${attributes.FeaturedArticle.data.attributes.Creator.data.attributes.CreatorName} on ${attributes.FeaturedArticle.data.attributes.PublishedDate}`}</p>
-          <p className={' text-slate-500'}>{attributes.FeaturedArticle.data.attributes.Description}</p>
+          <p className={' text-slate-500 text-sm md:text-lg'}>
+            {attributes.FeaturedArticle.data.attributes.Description}
+          </p>
           <div>
             {attributes.FeaturedArticle.data.attributes.Tags.data
               ?.filter((a) => a !== '')
@@ -37,17 +50,27 @@ const CategoryPage: PageGetCategoryBySlugComp = ({ data, error }) => {
         </div>
       </section>
       <section className={'mt-16'}>
-        <h4 className={'text-4xl font-bold text-gray-700'}>{`All ${attributes.CategoryName} articles`}</h4>
+        <h4
+          className={'text-xl md:text-3xl lg:text-4xl font-bold text-gray-700'}
+        >{`All ${attributes.CategoryName} articles`}</h4>
 
-        <div className={'grid grid-cols-3 mt-8 gap-20'}>
+        <div className={'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-8 gap-20'}>
           {attributes.Articles.data.map(({ id, attributes: articleAttribute }, index) => (
             <div
               className={'flex flex-col justify-between transition-all duration-200 hover:shadow-2xl p-4'}
               key={index}
             >
-              <div className={'min-h-[200px] max-h-[300px] bg-green-600'}></div>
+              <Image
+                src={`${attributes.FeaturedArticle.data.attributes.ArtImage.data.attributes.url}`}
+                width={750}
+                height={320}
+                alt={attributes.FeaturedArticle.data.attributes.Title}
+                objectFit="cover"
+                style={{ maxWidth: '480px' }}
+              />
+
               <Link href={`/article/${articleAttribute.Slug}`}>
-                <h4 className={'font-bold default-police text-2xl  text-slate-600 cursor-pointer'}>
+                <h4 className={'font-bold default-police text-xl md:text-2xl  text-slate-600 cursor-pointer'}>
                   {articleAttribute.Title}
                 </h4>
               </Link>
@@ -55,7 +78,9 @@ const CategoryPage: PageGetCategoryBySlugComp = ({ data, error }) => {
                 className={'mt-2 font-bold text-slate-700'}
               >{`${articleAttribute.Creator.data.attributes.CreatorName} on ${articleAttribute.PublishedDate}`}</p>
 
-              <p className={'mt-2 font-medium text-slate-700'}>{articleAttribute.Description}</p>
+              <p className={'mt-2 font-medium text-slate-700 text-sm md:text-lg'}>
+                {articleAttribute.Description}
+              </p>
               <div className={'flex'}>
                 {articleAttribute.Tags.data
                   ?.filter((a) => a !== '')
