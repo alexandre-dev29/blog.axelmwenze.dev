@@ -62,9 +62,7 @@ const HomePage: PageGetAllCategoriesComp = ({ data: pageData, error }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return await ssrGetAllCategories.getServerPage({}, ctx);
+  return await ssrGetAllCategories.getServerPage({}, { cookies: undefined });
 };
 
 export default withApollo(ssrGetAllCategories.withPage(() => ({}))(HomePage));
