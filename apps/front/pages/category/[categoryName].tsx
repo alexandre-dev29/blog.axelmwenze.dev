@@ -1,4 +1,3 @@
-/* eslint-disable-next-line */
 import { GetServerSideProps, GetStaticPaths } from 'next';
 import { PageGetCategoryBySlugComp, ssrGetAllCategories, ssrGetCategoryBySlug } from '@next-template-nx/data';
 import { withApollo } from '@next-template-nx/utils';
