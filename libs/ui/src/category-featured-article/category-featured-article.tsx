@@ -30,6 +30,18 @@ export default function CategoryFeaturedArticle({
         <p className={'font-bold text-gray-600'}>{`${articleData.author} on ${articleData.dateString}`}</p>
       </div>
       <p className={'default-police font-medium text-gray-600'}>{articleData.description}</p>
+      <div className={'flex gap-4 mt-2'}>
+        {articleData.tags
+          ?.filter((a) => a !== '')
+          .map((value, index) => (
+            <p
+              key={index}
+              className={'font-medium text-blue-500 bg-blue-200 self-start p-2 rounded-lg text-sm'}
+            >
+              {value}
+            </p>
+          ))}
+      </div>
     </div>
   ) : (
     <div

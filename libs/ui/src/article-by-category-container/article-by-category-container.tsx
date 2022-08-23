@@ -24,7 +24,7 @@ export function ArticleByCategoryContainer({
             <CategoryFeaturedArticle articleData={featuredArticle} isOtherArticlePresent={true} />
             <div className={`grid grid-rows-${otherArticles.length}`}>
               {otherArticles.map(
-                ({ title, author, dateString, description, authorImage, image, slug }, index) => (
+                ({ title, author, dateString, tags, description, authorImage, image, slug }, index) => (
                   <div className={'border-t-2 pt-8 '} key={index}>
                     <div className={'transition-all duration-200 hover:shadow-2xl p-4 rounded-md'}>
                       <Link href={`/article/${slug}`}>
@@ -42,6 +42,20 @@ export function ArticleByCategoryContainer({
                         <p className={'font-bold text-gray-600'}>{`${author} on ${dateString}`}</p>
                       </div>
                       <p className={'default-police font-light text-gray-600 mt-2'}>{description}</p>
+                      <div className={'flex gap-4 mt-2'}>
+                        {tags
+                          ?.filter((a) => a !== '')
+                          .map((value, index) => (
+                            <p
+                              key={index}
+                              className={
+                                'font-medium text-blue-500 bg-blue-200 self-start p-2 rounded-lg text-sm'
+                              }
+                            >
+                              {value}
+                            </p>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 )
