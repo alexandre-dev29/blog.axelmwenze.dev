@@ -1,6 +1,7 @@
 import { ArticleAttributs } from '@next-template-nx/data';
 import { Avatar } from '@nextui-org/react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export type typeMixedCategoryFeaturedType = {
   articleData: ArticleAttributs;
@@ -14,7 +15,13 @@ export default function CategoryFeaturedArticle({
     <div
       className={'flex flex-col justify-between transition-all duration-200 hover:shadow-2xl p-4 rounded-md'}
     >
-      <div className={'bg-red-500 w-full h-3/4 max-h-[280px] rounded-lg hidden lg:block'}></div>
+      <Image
+        src={`${articleData.image}`}
+        width={720}
+        height={310}
+        objectFit="cover"
+        style={{ maxWidth: '480px' }}
+      />
       <Link href={`/article/${articleData.slug}`}>
         <h2
           className={
@@ -49,7 +56,14 @@ export default function CategoryFeaturedArticle({
         'grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 transition-all duration-200 hover:shadow-2xl p-4 rounded-md'
       }
     >
-      <div className={'bg-red-500 w-full min-h-[300px] rounded-lg hidden lg:block'}></div>
+      <Image
+        src={`${articleData.image}`}
+        width={720}
+        height={310}
+        objectFit="cover"
+        style={{ maxWidth: '480px' }}
+      />
+
       <div>
         <Link href={`/article/${articleData.slug}`}>
           <h2
