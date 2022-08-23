@@ -23,6 +23,7 @@
     "next-axiom": "^0.13.0",
     "next-mdx-remote": "^4.1.0",
     "next-themes": "^0.2.0",
+    "nprogress": "^0.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.3.0",

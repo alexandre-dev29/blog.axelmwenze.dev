@@ -1,33 +1,51 @@
-import * as fs from 'fs';
 import { serialize } from 'next-mdx-remote/serialize';
 import matter from 'gray-matter';
-import { GetStaticProps } from 'next';
-import path from 'path';
+import { GetServerSideProps } from 'next';
 import { MDXRemote } from 'next-mdx-remote';
 import rehypeSlug from 'rehype-slug';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import 'highlight.js/styles/tokyo-night-dark.css';
 import { useEffect, useState } from 'react';
-import { log } from 'next-axiom';
+import { ssrGetArticleBySlug } from '@next-template-nx/data';
+import { motion, useScroll } from 'framer-motion';
 
-const PostPage = ({ mdxSource }) => {
+interface mixedReturnedServerData {
+  mdxSource: any;
+  dataPage: {
+    __typename?: 'ArticleEntity';
+    id?: string;
+    attributes?: {
+      __typename?: 'Article';
+      Title: string;
+      Slug: string;
+      ViewsCount?: number;
+      Description: string;
+      createdAt?: any;
+      Content: string;
+      PublishedDate: any;
+      Creator?: any;
+      ArtImage: any;
+      Tags?: any;
+    };
+  };
+}
+
+const PostPage = ({ mdxSource, dataPage }: mixedReturnedServerData) => {
   const [isSSR, setIsSSR] = useState(true);
   useEffect(() => {
     setIsSSR(false);
   }, []);
+  const { scrollYProgress } = useScroll();
   return (
     <div className={''}>
-      <h1
-        className={
-          'text-2xl md:text-5xl default-police font-bold text-slate-700'
-        }
-      >
-        What tools are used in a Modern Data Stack
+      <motion.div className={'progress-bar'} style={{ scaleX: scrollYProgress }} />
+      <h1 className={'text-2xl md:text-5xl default-police font-bold text-slate-700 text-center'}>
+        {dataPage.attributes.Title}
       </h1>
-      <p className={'font-bold  text-slate-400 mt-4 '}>
-        Axel mwenze on August 28th 2022
-      </p>
+      <p
+        className={'font-bold  text-slate-400 mt-4 '}
+      >{`${dataPage.attributes.Creator.data.attributes.CreatorName} on ${dataPage.attributes.PublishedDate}`}</p>
       <article className="prose lg:prose-xl prose-slate  max-w-none mt-8">
         {!isSSR ? <MDXRemote {...mdxSource} /> : <div>Rendering</div>}
       </article>
@@ -35,29 +53,25 @@ const PostPage = ({ mdxSource }) => {
   );
 };
 
-export const getServerSideProps: GetStaticProps = async () => {
-  let markdown;
-  try {
-    markdown = fs.readFileSync(
-      path.join(process.cwd(), 'public', 'simple_mdx_file.mdx')
-    );
-  } catch (e) {
-    log.error(e);
-  }
-  const { content } = matter(markdown);
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { props } = await ssrGetArticleBySlug.getServerPage(
+    { variables: { slug: { eq: params?.slug?.toString() || '' } } },
+    { cookies: undefined }
+  );
+
+  const selectedArticle = props.data.articles.data[0];
+  const { content } = matter(selectedArticle.attributes.Content);
+
   const mdxSource = await serialize(content, {
     mdxOptions: {
-      rehypePlugins: [
-        rehypeSlug,
-        [rehypeAutolinkHeadings, { behavior: 'wrap' }],
-        rehypeHighlight,
-      ],
+      rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }], rehypeHighlight],
     },
   });
 
   return {
     props: {
       mdxSource,
+      dataPage: selectedArticle,
     },
   };
 };
