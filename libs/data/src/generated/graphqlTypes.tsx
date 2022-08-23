@@ -310,6 +310,30 @@ export type DateTimeFilterInput = {
   startsWith?: InputMaybe<Scalars['DateTime']>;
 };
 
+export type Featured = {
+  __typename?: 'Featured';
+  article?: Maybe<ArticleEntityResponse>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type FeaturedEntity = {
+  __typename?: 'FeaturedEntity';
+  attributes?: Maybe<Featured>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type FeaturedEntityResponse = {
+  __typename?: 'FeaturedEntityResponse';
+  data?: Maybe<FeaturedEntity>;
+};
+
+export type FeaturedInput = {
+  article?: InputMaybe<Scalars['ID']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
 export type FileInfoInput = {
   alternativeText?: InputMaybe<Scalars['String']>;
   caption?: InputMaybe<Scalars['String']>;
@@ -344,6 +368,7 @@ export type GenericMorph =
   | Article
   | Category
   | Creator
+  | Featured
   | I18NLocale
   | Subscriber
   | Tag
@@ -479,6 +504,7 @@ export type Mutation = {
   deleteArticle?: Maybe<ArticleEntityResponse>;
   deleteCategory?: Maybe<CategoryEntityResponse>;
   deleteCreator?: Maybe<CreatorEntityResponse>;
+  deleteFeatured?: Maybe<FeaturedEntityResponse>;
   deleteSubscriber?: Maybe<SubscriberEntityResponse>;
   deleteTag?: Maybe<TagEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
@@ -501,6 +527,7 @@ export type Mutation = {
   updateArticle?: Maybe<ArticleEntityResponse>;
   updateCategory?: Maybe<CategoryEntityResponse>;
   updateCreator?: Maybe<CreatorEntityResponse>;
+  updateFeatured?: Maybe<FeaturedEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updateSubscriber?: Maybe<SubscriberEntityResponse>;
   updateTag?: Maybe<TagEntityResponse>;
@@ -651,6 +678,10 @@ export type MutationUpdateCreatorArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateFeaturedArgs = {
+  data: FeaturedInput;
+};
+
 export type MutationUpdateFileInfoArgs = {
   id: Scalars['ID'];
   info?: InputMaybe<FileInfoInput>;
@@ -722,6 +753,7 @@ export type Query = {
   category?: Maybe<CategoryEntityResponse>;
   creator?: Maybe<CreatorEntityResponse>;
   creators?: Maybe<CreatorEntityResponseCollection>;
+  featured?: Maybe<FeaturedEntityResponse>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   me?: Maybe<UsersPermissionsMe>;
@@ -774,6 +806,10 @@ export type QueryCreatorsArgs = {
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryFeaturedArgs = {
+  publicationState?: InputMaybe<PublicationState>;
 };
 
 export type QueryI18NLocaleArgs = {
@@ -1344,9 +1380,7 @@ export type GetAllArticlesQueryVariables = Exact<{
   locale?: InputMaybe<Scalars['I18NLocaleCode']>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<
-    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
-  >;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
 export type GetAllArticlesQuery = {
@@ -1562,9 +1596,7 @@ export type GetAllCategoriesQueryVariables = Exact<{
   locale?: InputMaybe<Scalars['I18NLocaleCode']>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<
-    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
-  >;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
 export type GetAllCategoriesQuery = {
@@ -1641,6 +1673,9 @@ export type GetAllCategoriesQuery = {
                     url: string;
                     previewUrl?: string | null;
                     name: string;
+                    hash: string;
+                    mime: string;
+                    size: number;
                   } | null;
                 } | null;
               };
@@ -1685,8 +1720,12 @@ export type GetAllCategoriesQuery = {
                         id?: string | null;
                         attributes?: {
                           __typename?: 'UploadFile';
-                          name: string;
                           url: string;
+                          previewUrl?: string | null;
+                          name: string;
+                          hash: string;
+                          mime: string;
+                          size: number;
                         } | null;
                       } | null;
                     };
@@ -1703,6 +1742,9 @@ export type GetAllCategoriesQuery = {
                     url: string;
                     previewUrl?: string | null;
                     name: string;
+                    hash: string;
+                    mime: string;
+                    size: number;
                   } | null;
                 } | null;
               };
@@ -1905,14 +1947,172 @@ export type GetCategoryBySlugQuery = {
             id?: string | null;
             attributes?: {
               __typename?: 'UploadFile';
-              name: string;
-              ext?: string | null;
-              previewUrl?: string | null;
               url: string;
+              previewUrl?: string | null;
+              name: string;
+              hash: string;
+              mime: string;
+              size: number;
             } | null;
           } | null;
         } | null;
         FeaturedArticle?: {
+          __typename?: 'ArticleEntityResponse';
+          data?: {
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          url: string;
+                          previewUrl?: string | null;
+                          name: string;
+                          hash: string;
+                          mime: string;
+                          size: number;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                    hash: string;
+                    mime: string;
+                    size: number;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        Articles?: {
+          __typename?: 'ArticleRelationResponseCollection';
+          data: Array<{
+            __typename?: 'ArticleEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Article';
+              Title: string;
+              Slug: string;
+              ViewsCount?: number | null;
+              Description: string;
+              createdAt?: any | null;
+              Content: string;
+              PublishedDate: any;
+              Creator?: {
+                __typename?: 'CreatorEntityResponse';
+                data?: {
+                  __typename?: 'CreatorEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'Creator';
+                    CreatorName: string;
+                    Bio: string;
+                    CreatorImage: {
+                      __typename?: 'UploadFileEntityResponse';
+                      data?: {
+                        __typename?: 'UploadFileEntity';
+                        id?: string | null;
+                        attributes?: {
+                          __typename?: 'UploadFile';
+                          url: string;
+                          previewUrl?: string | null;
+                          name: string;
+                          hash: string;
+                          mime: string;
+                          size: number;
+                        } | null;
+                      } | null;
+                    };
+                  } | null;
+                } | null;
+              } | null;
+              ArtImage: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    previewUrl?: string | null;
+                    name: string;
+                    hash: string;
+                    mime: string;
+                    size: number;
+                  } | null;
+                } | null;
+              };
+              Tags?: {
+                __typename?: 'TagRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'TagEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
+                }>;
+              } | null;
+            } | null;
+          }>;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetFeaturedArticleQueryVariables = Exact<{
+  publicationState?: InputMaybe<PublicationState>;
+}>;
+
+export type GetFeaturedArticleQuery = {
+  __typename?: 'Query';
+  featured?: {
+    __typename?: 'FeaturedEntityResponse';
+    data?: {
+      __typename?: 'FeaturedEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Featured';
+        article?: {
           __typename?: 'ArticleEntityResponse';
           data?: {
             __typename?: 'ArticleEntity';
@@ -1974,70 +2174,8 @@ export type GetCategoryBySlugQuery = {
             } | null;
           } | null;
         } | null;
-        Articles?: {
-          __typename?: 'ArticleRelationResponseCollection';
-          data: Array<{
-            __typename?: 'ArticleEntity';
-            id?: string | null;
-            attributes?: {
-              __typename?: 'Article';
-              Title: string;
-              Slug: string;
-              ViewsCount?: number | null;
-              Description: string;
-              createdAt?: any | null;
-              Content: string;
-              PublishedDate: any;
-              Creator?: {
-                __typename?: 'CreatorEntityResponse';
-                data?: {
-                  __typename?: 'CreatorEntity';
-                  id?: string | null;
-                  attributes?: {
-                    __typename?: 'Creator';
-                    CreatorName: string;
-                    Bio: string;
-                    CreatorImage: {
-                      __typename?: 'UploadFileEntityResponse';
-                      data?: {
-                        __typename?: 'UploadFileEntity';
-                        id?: string | null;
-                        attributes?: {
-                          __typename?: 'UploadFile';
-                          name: string;
-                          url: string;
-                        } | null;
-                      } | null;
-                    };
-                  } | null;
-                } | null;
-              } | null;
-              ArtImage: {
-                __typename?: 'UploadFileEntityResponse';
-                data?: {
-                  __typename?: 'UploadFileEntity';
-                  id?: string | null;
-                  attributes?: {
-                    __typename?: 'UploadFile';
-                    url: string;
-                    previewUrl?: string | null;
-                    name: string;
-                  } | null;
-                } | null;
-              };
-              Tags?: {
-                __typename?: 'TagRelationResponseCollection';
-                data: Array<{
-                  __typename?: 'TagEntity';
-                  id?: string | null;
-                  attributes?: { __typename?: 'Tag'; TagText: string } | null;
-                }>;
-              } | null;
-            } | null;
-          }>;
-        } | null;
       } | null;
-    }>;
+    } | null;
   } | null;
 };
 
@@ -2045,9 +2183,7 @@ export type GetAllTagsQueryVariables = Exact<{
   filters?: InputMaybe<TagFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<
-    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
-  >;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
 export type GetAllTagsQuery = {
@@ -2176,23 +2312,14 @@ export const GetAllArticlesDocument = gql`
  * });
  */
 export function useGetAllArticlesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetAllArticlesQuery,
-    GetAllArticlesQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<GetAllArticlesQuery, GetAllArticlesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetAllArticlesQuery, GetAllArticlesQueryVariables>(
-    GetAllArticlesDocument,
-    options
-  );
+  return Apollo.useQuery<GetAllArticlesQuery, GetAllArticlesQueryVariables>(GetAllArticlesDocument, options);
 }
 
 export function useGetAllArticlesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAllArticlesQuery,
-    GetAllArticlesQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAllArticlesQuery, GetAllArticlesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetAllArticlesQuery, GetAllArticlesQueryVariables>(
@@ -2201,16 +2328,9 @@ export function useGetAllArticlesLazyQuery(
   );
 }
 
-export type GetAllArticlesQueryHookResult = ReturnType<
-  typeof useGetAllArticlesQuery
->;
-export type GetAllArticlesLazyQueryHookResult = ReturnType<
-  typeof useGetAllArticlesLazyQuery
->;
-export type GetAllArticlesQueryResult = Apollo.QueryResult<
-  GetAllArticlesQuery,
-  GetAllArticlesQueryVariables
->;
+export type GetAllArticlesQueryHookResult = ReturnType<typeof useGetAllArticlesQuery>;
+export type GetAllArticlesLazyQueryHookResult = ReturnType<typeof useGetAllArticlesLazyQuery>;
+export type GetAllArticlesQueryResult = Apollo.QueryResult<GetAllArticlesQuery, GetAllArticlesQueryVariables>;
 export const GetOneArticleDocument = gql`
   query GetOneArticle($id: ID, $locale: I18NLocaleCode) {
     article(locale: $locale, id: $id) {
@@ -2284,41 +2404,22 @@ export const GetOneArticleDocument = gql`
  * });
  */
 export function useGetOneArticleQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetOneArticleQuery,
-    GetOneArticleQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<GetOneArticleQuery, GetOneArticleQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetOneArticleQuery, GetOneArticleQueryVariables>(
-    GetOneArticleDocument,
-    options
-  );
+  return Apollo.useQuery<GetOneArticleQuery, GetOneArticleQueryVariables>(GetOneArticleDocument, options);
 }
 
 export function useGetOneArticleLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOneArticleQuery,
-    GetOneArticleQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetOneArticleQuery, GetOneArticleQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetOneArticleQuery, GetOneArticleQueryVariables>(
-    GetOneArticleDocument,
-    options
-  );
+  return Apollo.useLazyQuery<GetOneArticleQuery, GetOneArticleQueryVariables>(GetOneArticleDocument, options);
 }
 
-export type GetOneArticleQueryHookResult = ReturnType<
-  typeof useGetOneArticleQuery
->;
-export type GetOneArticleLazyQueryHookResult = ReturnType<
-  typeof useGetOneArticleLazyQuery
->;
-export type GetOneArticleQueryResult = Apollo.QueryResult<
-  GetOneArticleQuery,
-  GetOneArticleQueryVariables
->;
+export type GetOneArticleQueryHookResult = ReturnType<typeof useGetOneArticleQuery>;
+export type GetOneArticleLazyQueryHookResult = ReturnType<typeof useGetOneArticleLazyQuery>;
+export type GetOneArticleQueryResult = Apollo.QueryResult<GetOneArticleQuery, GetOneArticleQueryVariables>;
 export const GetArticleBySlugDocument = gql`
   query GetArticleBySlug($slug: StringFilterInput, $locale: I18NLocaleCode) {
     articles(locale: $locale, filters: { Slug: $slug }) {
@@ -2392,10 +2493,7 @@ export const GetArticleBySlugDocument = gql`
  * });
  */
 export function useGetArticleBySlugQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetArticleBySlugQuery,
-    GetArticleBySlugQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<GetArticleBySlugQuery, GetArticleBySlugQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<GetArticleBySlugQuery, GetArticleBySlugQueryVariables>(
@@ -2405,24 +2503,17 @@ export function useGetArticleBySlugQuery(
 }
 
 export function useGetArticleBySlugLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetArticleBySlugQuery,
-    GetArticleBySlugQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetArticleBySlugQuery, GetArticleBySlugQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetArticleBySlugQuery,
-    GetArticleBySlugQueryVariables
-  >(GetArticleBySlugDocument, options);
+  return Apollo.useLazyQuery<GetArticleBySlugQuery, GetArticleBySlugQueryVariables>(
+    GetArticleBySlugDocument,
+    options
+  );
 }
 
-export type GetArticleBySlugQueryHookResult = ReturnType<
-  typeof useGetArticleBySlugQuery
->;
-export type GetArticleBySlugLazyQueryHookResult = ReturnType<
-  typeof useGetArticleBySlugLazyQuery
->;
+export type GetArticleBySlugQueryHookResult = ReturnType<typeof useGetArticleBySlugQuery>;
+export type GetArticleBySlugLazyQueryHookResult = ReturnType<typeof useGetArticleBySlugLazyQuery>;
 export type GetArticleBySlugQueryResult = Apollo.QueryResult<
   GetArticleBySlugQuery,
   GetArticleBySlugQueryVariables
@@ -2495,6 +2586,10 @@ export const GetAllCategoriesDocument = gql`
                       url
                       previewUrl
                       name
+                      previewUrl
+                      hash
+                      mime
+                      size
                     }
                   }
                 }
@@ -2530,8 +2625,13 @@ export const GetAllCategoriesDocument = gql`
                         data {
                           id
                           attributes {
-                            name
                             url
+                            previewUrl
+                            name
+                            previewUrl
+                            hash
+                            mime
+                            size
                           }
                         }
                       }
@@ -2545,6 +2645,10 @@ export const GetAllCategoriesDocument = gql`
                       url
                       previewUrl
                       name
+                      previewUrl
+                      hash
+                      mime
+                      size
                     }
                   }
                 }
@@ -2586,10 +2690,7 @@ export const GetAllCategoriesDocument = gql`
  * });
  */
 export function useGetAllCategoriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetAllCategoriesQuery,
-    GetAllCategoriesQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(
@@ -2599,24 +2700,17 @@ export function useGetAllCategoriesQuery(
 }
 
 export function useGetAllCategoriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAllCategoriesQuery,
-    GetAllCategoriesQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetAllCategoriesQuery,
-    GetAllCategoriesQueryVariables
-  >(GetAllCategoriesDocument, options);
+  return Apollo.useLazyQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(
+    GetAllCategoriesDocument,
+    options
+  );
 }
 
-export type GetAllCategoriesQueryHookResult = ReturnType<
-  typeof useGetAllCategoriesQuery
->;
-export type GetAllCategoriesLazyQueryHookResult = ReturnType<
-  typeof useGetAllCategoriesLazyQuery
->;
+export type GetAllCategoriesQueryHookResult = ReturnType<typeof useGetAllCategoriesQuery>;
+export type GetAllCategoriesLazyQueryHookResult = ReturnType<typeof useGetAllCategoriesLazyQuery>;
 export type GetAllCategoriesQueryResult = Apollo.QueryResult<
   GetAllCategoriesQuery,
   GetAllCategoriesQueryVariables
@@ -2765,23 +2859,14 @@ export const GetOneCategoryDocument = gql`
  * });
  */
 export function useGetOneCategoryQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetOneCategoryQuery,
-    GetOneCategoryQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<GetOneCategoryQuery, GetOneCategoryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetOneCategoryQuery, GetOneCategoryQueryVariables>(
-    GetOneCategoryDocument,
-    options
-  );
+  return Apollo.useQuery<GetOneCategoryQuery, GetOneCategoryQueryVariables>(GetOneCategoryDocument, options);
 }
 
 export function useGetOneCategoryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOneCategoryQuery,
-    GetOneCategoryQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetOneCategoryQuery, GetOneCategoryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetOneCategoryQuery, GetOneCategoryQueryVariables>(
@@ -2790,16 +2875,9 @@ export function useGetOneCategoryLazyQuery(
   );
 }
 
-export type GetOneCategoryQueryHookResult = ReturnType<
-  typeof useGetOneCategoryQuery
->;
-export type GetOneCategoryLazyQueryHookResult = ReturnType<
-  typeof useGetOneCategoryLazyQuery
->;
-export type GetOneCategoryQueryResult = Apollo.QueryResult<
-  GetOneCategoryQuery,
-  GetOneCategoryQueryVariables
->;
+export type GetOneCategoryQueryHookResult = ReturnType<typeof useGetOneCategoryQuery>;
+export type GetOneCategoryLazyQueryHookResult = ReturnType<typeof useGetOneCategoryLazyQuery>;
+export type GetOneCategoryQueryResult = Apollo.QueryResult<GetOneCategoryQuery, GetOneCategoryQueryVariables>;
 export const GetCategoryBySlugDocument = gql`
   query GetCategoryBySlug($categoryName: StringFilterInput) {
     categories(filters: { CategoryName: $categoryName }) {
@@ -2811,10 +2889,13 @@ export const GetCategoryBySlugDocument = gql`
             data {
               id
               attributes {
-                name
-                ext
-                previewUrl
                 url
+                previewUrl
+                name
+                previewUrl
+                hash
+                mime
+                size
               }
             }
           }
@@ -2841,8 +2922,13 @@ export const GetCategoryBySlugDocument = gql`
                         data {
                           id
                           attributes {
-                            name
                             url
+                            previewUrl
+                            name
+                            previewUrl
+                            hash
+                            mime
+                            size
                           }
                         }
                       }
@@ -2856,6 +2942,10 @@ export const GetCategoryBySlugDocument = gql`
                       url
                       previewUrl
                       name
+                      previewUrl
+                      hash
+                      mime
+                      size
                     }
                   }
                 }
@@ -2891,8 +2981,13 @@ export const GetCategoryBySlugDocument = gql`
                         data {
                           id
                           attributes {
-                            name
                             url
+                            previewUrl
+                            name
+                            previewUrl
+                            hash
+                            mime
+                            size
                           }
                         }
                       }
@@ -2906,6 +3001,10 @@ export const GetCategoryBySlugDocument = gql`
                       url
                       previewUrl
                       name
+                      previewUrl
+                      hash
+                      mime
+                      size
                     }
                   }
                 }
@@ -2943,40 +3042,134 @@ export const GetCategoryBySlugDocument = gql`
  * });
  */
 export function useGetCategoryBySlugQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetCategoryBySlugQuery,
-    GetCategoryBySlugQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<GetCategoryBySlugQuery, GetCategoryBySlugQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetCategoryBySlugQuery,
-    GetCategoryBySlugQueryVariables
-  >(GetCategoryBySlugDocument, options);
+  return Apollo.useQuery<GetCategoryBySlugQuery, GetCategoryBySlugQueryVariables>(
+    GetCategoryBySlugDocument,
+    options
+  );
 }
 
 export function useGetCategoryBySlugLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetCategoryBySlugQuery,
-    GetCategoryBySlugQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCategoryBySlugQuery, GetCategoryBySlugQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetCategoryBySlugQuery,
-    GetCategoryBySlugQueryVariables
-  >(GetCategoryBySlugDocument, options);
+  return Apollo.useLazyQuery<GetCategoryBySlugQuery, GetCategoryBySlugQueryVariables>(
+    GetCategoryBySlugDocument,
+    options
+  );
 }
 
-export type GetCategoryBySlugQueryHookResult = ReturnType<
-  typeof useGetCategoryBySlugQuery
->;
-export type GetCategoryBySlugLazyQueryHookResult = ReturnType<
-  typeof useGetCategoryBySlugLazyQuery
->;
+export type GetCategoryBySlugQueryHookResult = ReturnType<typeof useGetCategoryBySlugQuery>;
+export type GetCategoryBySlugLazyQueryHookResult = ReturnType<typeof useGetCategoryBySlugLazyQuery>;
 export type GetCategoryBySlugQueryResult = Apollo.QueryResult<
   GetCategoryBySlugQuery,
   GetCategoryBySlugQueryVariables
+>;
+export const GetFeaturedArticleDocument = gql`
+  query GetFeaturedArticle($publicationState: PublicationState = LIVE) {
+    featured(publicationState: $publicationState) {
+      data {
+        id
+        attributes {
+          article {
+            data {
+              id
+              attributes {
+                Title
+                Slug
+                ViewsCount
+                Description
+                createdAt
+                Content
+                PublishedDate
+                Creator {
+                  data {
+                    id
+                    attributes {
+                      CreatorName
+                      Bio
+                      CreatorImage {
+                        data {
+                          id
+                          attributes {
+                            name
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ArtImage {
+                  data {
+                    id
+                    attributes {
+                      url
+                      previewUrl
+                      name
+                    }
+                  }
+                }
+                Tags {
+                  data {
+                    id
+                    attributes {
+                      TagText
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetFeaturedArticleQuery__
+ *
+ * To run a query within a React component, call `useGetFeaturedArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFeaturedArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFeaturedArticleQuery({
+ *   variables: {
+ *      publicationState: // value for 'publicationState'
+ *   },
+ * });
+ */
+export function useGetFeaturedArticleQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetFeaturedArticleQuery, GetFeaturedArticleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetFeaturedArticleQuery, GetFeaturedArticleQueryVariables>(
+    GetFeaturedArticleDocument,
+    options
+  );
+}
+
+export function useGetFeaturedArticleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetFeaturedArticleQuery, GetFeaturedArticleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetFeaturedArticleQuery, GetFeaturedArticleQueryVariables>(
+    GetFeaturedArticleDocument,
+    options
+  );
+}
+
+export type GetFeaturedArticleQueryHookResult = ReturnType<typeof useGetFeaturedArticleQuery>;
+export type GetFeaturedArticleLazyQueryHookResult = ReturnType<typeof useGetFeaturedArticleLazyQuery>;
+export type GetFeaturedArticleQueryResult = Apollo.QueryResult<
+  GetFeaturedArticleQuery,
+  GetFeaturedArticleQueryVariables
 >;
 export const GetAllTagsDocument = gql`
   query GetAllTags(
@@ -2985,12 +3178,7 @@ export const GetAllTagsDocument = gql`
     $publicationState: PublicationState = LIVE
     $sort: [String] = []
   ) {
-    tags(
-      filters: $filters
-      pagination: $pagination
-      publicationState: $publicationState
-      sort: $sort
-    ) {
+    tags(filters: $filters, pagination: $pagination, publicationState: $publicationState, sort: $sort) {
       data {
         id
         attributes {
@@ -3023,39 +3211,22 @@ export const GetAllTagsDocument = gql`
  * });
  */
 export function useGetAllTagsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetAllTagsQuery,
-    GetAllTagsQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<GetAllTagsQuery, GetAllTagsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(
-    GetAllTagsDocument,
-    options
-  );
+  return Apollo.useQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(GetAllTagsDocument, options);
 }
 
 export function useGetAllTagsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAllTagsQuery,
-    GetAllTagsQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAllTagsQuery, GetAllTagsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(
-    GetAllTagsDocument,
-    options
-  );
+  return Apollo.useLazyQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(GetAllTagsDocument, options);
 }
 
 export type GetAllTagsQueryHookResult = ReturnType<typeof useGetAllTagsQuery>;
-export type GetAllTagsLazyQueryHookResult = ReturnType<
-  typeof useGetAllTagsLazyQuery
->;
-export type GetAllTagsQueryResult = Apollo.QueryResult<
-  GetAllTagsQuery,
-  GetAllTagsQueryVariables
->;
+export type GetAllTagsLazyQueryHookResult = ReturnType<typeof useGetAllTagsLazyQuery>;
+export type GetAllTagsQueryResult = Apollo.QueryResult<GetAllTagsQuery, GetAllTagsQueryVariables>;
 export const GetOneTagDocument = gql`
   query GetOneTag($id: ID) {
     tag(id: $id) {
@@ -3091,30 +3262,16 @@ export function useGetOneTagQuery(
   baseOptions?: Apollo.QueryHookOptions<GetOneTagQuery, GetOneTagQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetOneTagQuery, GetOneTagQueryVariables>(
-    GetOneTagDocument,
-    options
-  );
+  return Apollo.useQuery<GetOneTagQuery, GetOneTagQueryVariables>(GetOneTagDocument, options);
 }
 
 export function useGetOneTagLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOneTagQuery,
-    GetOneTagQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<GetOneTagQuery, GetOneTagQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetOneTagQuery, GetOneTagQueryVariables>(
-    GetOneTagDocument,
-    options
-  );
+  return Apollo.useLazyQuery<GetOneTagQuery, GetOneTagQueryVariables>(GetOneTagDocument, options);
 }
 
 export type GetOneTagQueryHookResult = ReturnType<typeof useGetOneTagQuery>;
-export type GetOneTagLazyQueryHookResult = ReturnType<
-  typeof useGetOneTagLazyQuery
->;
-export type GetOneTagQueryResult = Apollo.QueryResult<
-  GetOneTagQuery,
-  GetOneTagQueryVariables
->;
+export type GetOneTagLazyQueryHookResult = ReturnType<typeof useGetOneTagLazyQuery>;
+export type GetOneTagQueryResult = Apollo.QueryResult<GetOneTagQuery, GetOneTagQueryVariables>;

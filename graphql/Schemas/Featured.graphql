@@ -1,0 +1,59 @@
+query GetFeaturedArticle($publicationState: PublicationState = LIVE){
+  featured(publicationState: $publicationState){
+    data {
+      id
+      attributes {
+        article {
+          data {
+            id
+            attributes {
+              Title
+              Slug
+              ViewsCount
+              Description
+              createdAt
+              Content
+              PublishedDate
+              Creator {
+                data {
+                  id
+                  attributes {
+                    CreatorName
+                    Bio
+                    CreatorImage {
+                      data {
+                        id
+                        attributes {
+                          name
+                          url
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              ArtImage {
+                data {
+                  id
+                  attributes {
+                    url
+                    previewUrl
+                    name
+                  }
+                }
+              }
+              Tags{
+                data {
+                  id
+                  attributes {
+                    TagText
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

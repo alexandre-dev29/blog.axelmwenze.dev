@@ -1,13 +1,7 @@
 import { IncomingMessage } from 'http';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
 import { NextPage } from 'next';
-import {
-  ApolloClient,
-  ApolloProvider,
-  from,
-  InMemoryCache,
-  NormalizedCacheObject,
-} from '@apollo/client';
+import { ApolloClient, ApolloProvider, from, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { authLinkApp, ErrorLinkHandler, httpLinkApp } from './GraphqlConfig';
 import { DarkTheme, ErrorPopup, LightTheme } from '@next-template-nx/ui';
@@ -21,10 +15,7 @@ export type ApolloClientContext = {
   cookies: NextApiRequestCookies;
 };
 
-export const getApolloClient = (
-  ctx?: ApolloClientContext,
-  initialState?: NormalizedCacheObject
-) => {
+export const getApolloClient = (ctx?: ApolloClientContext, initialState?: NormalizedCacheObject) => {
   if (ctx && ctx.req) {
     const { req } = ctx;
   }
@@ -38,21 +29,14 @@ export const getApolloClient = (
 };
 
 export const withApollo = (Comp: NextPage) => (props: any) => {
-  const { isOpen, setIsOpen, errorType, messagesError } =
-    useGraphqlErrorState();
+  const { isOpen, setIsOpen, errorType, messagesError } = useGraphqlErrorState();
 
   function closeModal() {
     setIsOpen(false);
   }
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        zIndex: 0,
-        padding: '1rem 10rem',
-      }}
-    >
+    <div>
       <ErrorPopup
         errorType={errorType}
         messages={messagesError}
@@ -69,9 +53,7 @@ export const withApollo = (Comp: NextPage) => (props: any) => {
         value={{ light: LightTheme.className, dark: DarkTheme.className }}
       >
         <NextUIProvider>
-          <ApolloProvider
-            client={getApolloClient(undefined, props.apolloState)}
-          >
+          <ApolloProvider client={getApolloClient(undefined, props.apolloState)}>
             <Comp />
           </ApolloProvider>
         </NextUIProvider>

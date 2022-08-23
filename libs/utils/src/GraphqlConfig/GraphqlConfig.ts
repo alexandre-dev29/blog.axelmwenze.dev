@@ -16,9 +16,7 @@ export const ErrorLinkHandler = () => {
     if (networkError) {
       setState({ errorType: ErrorTypeGraphQl.Network });
       setState({
-        messagesError: [
-          'Connection Issue Please check Your internet connection and try again',
-        ],
+        messagesError: ['Connection Issue Please check Your internet connection and try again'],
       });
       setState({ isOpen: true });
     }
@@ -44,6 +42,9 @@ export const defaultApolloClient = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       CategoryEntity: {
+        keyFields: ['id', 'attributes'],
+      },
+      UploadFileEntity: {
         keyFields: ['id', 'attributes'],
       },
     },

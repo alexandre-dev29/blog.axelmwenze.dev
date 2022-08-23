@@ -5,7 +5,7 @@ schema {
   mutation: Mutation
 }
 
-union GenericMorph = Article | Category | Creator | I18NLocale | Subscriber | Tag | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser
+union GenericMorph = Article | Category | Creator | Featured | I18NLocale | Subscriber | Tag | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser
 
 type Article {
   ArtImage: UploadFileEntityResponse!
@@ -97,6 +97,22 @@ type CreatorEntityResponseCollection {
   meta: ResponseCollectionMeta!
 }
 
+type Featured {
+  article: ArticleEntityResponse
+  createdAt: DateTime
+  publishedAt: DateTime
+  updatedAt: DateTime
+}
+
+type FeaturedEntity {
+  attributes: Featured
+  id: ID
+}
+
+type FeaturedEntityResponse {
+  data: FeaturedEntity
+}
+
 type I18NLocale {
   code: String
   createdAt: DateTime
@@ -135,6 +151,7 @@ type Mutation {
   deleteArticle(id: ID!, locale: I18NLocaleCode): ArticleEntityResponse
   deleteCategory(id: ID!, locale: I18NLocaleCode): CategoryEntityResponse
   deleteCreator(id: ID!): CreatorEntityResponse
+  deleteFeatured: FeaturedEntityResponse
   deleteSubscriber(id: ID!): SubscriberEntityResponse
   deleteTag(id: ID!): TagEntityResponse
   deleteUploadFile(id: ID!): UploadFileEntityResponse
@@ -157,6 +174,7 @@ type Mutation {
   updateArticle(data: ArticleInput!, id: ID!, locale: I18NLocaleCode): ArticleEntityResponse
   updateCategory(data: CategoryInput!, id: ID!, locale: I18NLocaleCode): CategoryEntityResponse
   updateCreator(data: CreatorInput!, id: ID!): CreatorEntityResponse
+  updateFeatured(data: FeaturedInput!): FeaturedEntityResponse
   updateFileInfo(id: ID!, info: FileInfoInput): UploadFileEntityResponse!
   updateSubscriber(data: SubscriberInput!, id: ID!): SubscriberEntityResponse
   updateTag(data: TagInput!, id: ID!): TagEntityResponse
@@ -183,6 +201,7 @@ type Query {
   category(id: ID, locale: I18NLocaleCode): CategoryEntityResponse
   creator(id: ID): CreatorEntityResponse
   creators(filters: CreatorFiltersInput, pagination: PaginationArg = {}, publicationState: PublicationState = LIVE, sort: [String] = []): CreatorEntityResponseCollection
+  featured(publicationState: PublicationState = LIVE): FeaturedEntityResponse
   i18NLocale(id: ID): I18NLocaleEntityResponse
   i18NLocales(filters: I18NLocaleFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): I18NLocaleEntityResponseCollection
   me: UsersPermissionsMe
@@ -592,6 +611,11 @@ input DateTimeFilterInput {
   null: Boolean
   or: [DateTime]
   startsWith: DateTime
+}
+
+input FeaturedInput {
+  article: ID
+  publishedAt: DateTime
 }
 
 input FileInfoInput {

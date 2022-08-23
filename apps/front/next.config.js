@@ -11,6 +11,9 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  images: {
+    domains: ['localhost', 'devprojectbucket.s3.amazonaws.com'],
+  },
 };
 
 module.exports = withAxiom(withNx(nextConfig));

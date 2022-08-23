@@ -53,6 +53,10 @@ query GetAllCategories($filters: CategoryFiltersInput, $locale: I18NLocaleCode, 
                     url
                     previewUrl
                     name
+                    previewUrl
+                    hash
+                    mime
+                    size
                   }
                 }
               }
@@ -88,8 +92,13 @@ query GetAllCategories($filters: CategoryFiltersInput, $locale: I18NLocaleCode, 
                       data {
                         id
                         attributes {
-                          name
                           url
+                          previewUrl
+                          name
+                          previewUrl
+                          hash
+                          mime
+                          size
                         }
                       }
                     }
@@ -103,6 +112,10 @@ query GetAllCategories($filters: CategoryFiltersInput, $locale: I18NLocaleCode, 
                     url
                     previewUrl
                     name
+                    previewUrl
+                    hash
+                    mime
+                    size
                   }
                 }
               }
@@ -121,6 +134,8 @@ query GetAllCategories($filters: CategoryFiltersInput, $locale: I18NLocaleCode, 
     }
   }
 }
+
+
 
 query GetOneCategory($id: ID, $locale: I18NLocaleCode){
   category(id: $id, locale: $locale){
@@ -256,10 +271,13 @@ query GetCategoryBySlug($categoryName: StringFilterInput){
           data {
             id
             attributes {
-              name
-              ext
-              previewUrl
               url
+              previewUrl
+              name
+              previewUrl
+              hash
+              mime
+              size
             }
           }
         }
@@ -286,8 +304,13 @@ query GetCategoryBySlug($categoryName: StringFilterInput){
                       data {
                         id
                         attributes {
-                          name
                           url
+                          previewUrl
+                          name
+                          previewUrl
+                          hash
+                          mime
+                          size
                         }
                       }
                     }
@@ -301,6 +324,10 @@ query GetCategoryBySlug($categoryName: StringFilterInput){
                     url
                     previewUrl
                     name
+                    previewUrl
+                    hash
+                    mime
+                    size
                   }
                 }
               }
@@ -336,8 +363,13 @@ query GetCategoryBySlug($categoryName: StringFilterInput){
                       data {
                         id
                         attributes {
-                          name
                           url
+                          previewUrl
+                          name
+                          previewUrl
+                          hash
+                          mime
+                          size
                         }
                       }
                     }
@@ -351,6 +383,10 @@ query GetCategoryBySlug($categoryName: StringFilterInput){
                     url
                     previewUrl
                     name
+                    previewUrl
+                    hash
+                    mime
+                    size
                   }
                 }
               }

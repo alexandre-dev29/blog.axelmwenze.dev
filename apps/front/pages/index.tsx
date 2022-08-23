@@ -1,41 +1,70 @@
+import { ArticleByCategoryContainer, FeaturedArticle } from '@next-template-nx/ui';
+import { GetServerSideProps } from 'next';
 import {
-  ArticleAttributs,
-  ArticleByCategoryContainer,
-  FeaturedArticle,
-} from '@next-template-nx/ui';
+  GetFeaturedArticleQuery,
+  PageGetAllCategoriesComp,
+  ssrGetAllCategories,
+  useGetFeaturedArticleQuery,
+} from '@next-template-nx/data';
+import {
+  defaultApolloClient,
+  getArticleFromArticleEntity,
+  getArticleFromFeaturedQuery,
+  getArticlesFromCategory,
+  withApollo,
+} from '@next-template-nx/utils';
+import { useEffect, useState } from 'react';
 
-const HomePage = (props) => {
-  const values = {
-    title: 'Introducing segment data lakes',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquid at doloremque ducimus, excepturi laboriosam libero, maxime nam neque non quis quod ratione reprehenderit, rerum suscipit temporibus tenetur vel veniam.',
-    author: 'Axel mwenze',
-    dateString: 'August 2022',
-    tags: ['Engineering', 'Company'],
-  } as ArticleAttributs;
+const HomePage: PageGetAllCategoriesComp = ({ data: pageData, error }) => {
+  const [featuredEntity, setFeaturedEntity] = useState({} as GetFeaturedArticleQuery);
+  const { data: dataFeatured, loading } = useGetFeaturedArticleQuery({
+    client: defaultApolloClient,
+    fetchPolicy: 'cache-first',
+    errorPolicy: 'all',
+  });
+  useEffect(() => {
+    if (!loading) {
+      setFeaturedEntity(dataFeatured);
+    }
+  }, [dataFeatured, loading]);
+  const { author, dateString, tags, title, description, image, authorImage, slug } =
+    getArticleFromFeaturedQuery(featuredEntity);
+
   return (
     <div>
-      <FeaturedArticle
-        title={values.title}
-        author={values.author}
-        description={values.description}
-        dateString={values.dateString}
-        tags={values.tags}
-      />
-      <ArticleByCategoryContainer
-        categoryTitle={'Engineering'}
-        featuredArticle={values}
-        otherArticles={[values, values]}
-      />
+      {!loading ? (
+        <FeaturedArticle
+          title={title}
+          author={author}
+          description={description}
+          dateString={dateString}
+          tags={tags}
+          image={image}
+          authorImage={authorImage}
+          slug={slug}
+        />
+      ) : (
+        <p>Loading</p>
+      )}
+
+      {pageData.categories.data.slice(0, 2).map((value) => {
+        return (
+          <ArticleByCategoryContainer
+            categoryTitle={value?.attributes?.CategoryName}
+            featuredArticle={getArticleFromArticleEntity(value?.attributes?.FeaturedArticle?.data)}
+            otherArticles={getArticlesFromCategory(value?.attributes?.Articles?.data)}
+            key={value?.id}
+          />
+        );
+      })}
     </div>
   );
 };
-export default HomePage;
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//   // @ts-ignore
-//   return await ssrGetAllAbout.getServerPage({}, ctx);
-// };
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return await ssrGetAllCategories.getServerPage({}, ctx);
+};
 
-// export default withApollo(ssrGetAllAbout.withPage(() => ({}))(HomePage));
+export default withApollo(ssrGetAllCategories.withPage(() => ({}))(HomePage));
