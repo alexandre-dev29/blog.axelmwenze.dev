@@ -1,6 +1,7 @@
 import { ArticleAttributs } from '@next-template-nx/data';
 import { Avatar } from '@nextui-org/react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function FeaturedArticle({
   title,
@@ -16,7 +17,7 @@ export function FeaturedArticle({
     <section className={''}>
       <div
         className={
-          'grid grid-cols-1 lg:grid-cols-2 lg:gap-12 xl:gap-24 mt-8 transition-all duration-200 hover:shadow-2xl p-4 rounded-md'
+          'grid grid-cols-1 lg:grid-cols-2 lg:gap-12 xl:gap-24 mt-8 transition-all duration-200 hover:shadow-2xl p-4 rounded-md relative'
         }
       >
         <div className={'flex flex-col justify-between'}>
@@ -47,7 +48,7 @@ export function FeaturedArticle({
               ))}
           </div>
         </div>
-        <div className={'bg-teal-600 rounded-lg hidden lg:block min-h-[300px]'}></div>
+        <Image src={`${image}`} width={720} height={320} objectFit="cover" style={{ maxWidth: '480px' }} />
       </div>
     </section>
   );

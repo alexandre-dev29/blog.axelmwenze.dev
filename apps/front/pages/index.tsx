@@ -1,7 +1,7 @@
 import { ArticleByCategoryContainer, FeaturedArticle } from '@next-template-nx/ui';
 import { GetServerSideProps } from 'next';
 import {
-  GetFeaturedArticleQuery,
+  ArticleAttributs,
   PageGetAllCategoriesComp,
   ssrGetAllCategories,
   useGetFeaturedArticleQuery,
@@ -13,35 +13,30 @@ import {
   getArticlesFromCategory,
   withApollo,
 } from '@next-template-nx/utils';
-import { useEffect, useState } from 'react';
 
 const HomePage: PageGetAllCategoriesComp = ({ data: pageData, error }) => {
-  const [featuredEntity, setFeaturedEntity] = useState({} as GetFeaturedArticleQuery);
   const { data: dataFeatured, loading } = useGetFeaturedArticleQuery({
     client: defaultApolloClient,
     fetchPolicy: 'cache-first',
     errorPolicy: 'all',
   });
-  useEffect(() => {
-    if (!loading) {
-      setFeaturedEntity(dataFeatured);
-    }
-  }, [dataFeatured, loading]);
-  const { author, dateString, tags, title, description, image, authorImage, slug } =
-    getArticleFromFeaturedQuery(featuredEntity);
 
+  let featuredArticleData = {} as ArticleAttributs;
+  if (!loading) {
+    featuredArticleData = getArticleFromFeaturedQuery(dataFeatured);
+  }
   return (
     <div>
       {!loading ? (
         <FeaturedArticle
-          title={title}
-          author={author}
-          description={description}
-          dateString={dateString}
-          tags={tags}
-          image={image}
-          authorImage={authorImage}
-          slug={slug}
+          title={featuredArticleData.title}
+          author={featuredArticleData.author}
+          description={featuredArticleData.description}
+          dateString={featuredArticleData.dateString}
+          tags={featuredArticleData.tags}
+          image={featuredArticleData.image}
+          authorImage={featuredArticleData.authorImage}
+          slug={featuredArticleData.slug}
         />
       ) : (
         <p>Loading</p>
