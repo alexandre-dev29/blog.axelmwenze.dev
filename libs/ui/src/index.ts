@@ -3,6 +3,7 @@ export * from './error-popup/error-popup';
 export * from './nav-bar/nav-bar';
 export * from './footer/footer';
 export * from './layout/layout';
+export * from './share-article/share-article';
 export * from './ThemeConfig';
 export * from './subscribe-newsletter/subscribe-newsletter';
 export * from './featured-article/featured-article';

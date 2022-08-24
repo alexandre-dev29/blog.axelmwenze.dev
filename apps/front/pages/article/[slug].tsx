@@ -7,8 +7,10 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import 'highlight.js/styles/tokyo-night-dark.css';
 import { useEffect, useState } from 'react';
-import { ssrGetArticleBySlug } from '@next-template-nx/data';
+import { ssrGetArticleBySlug, TagEntityResponseCollection } from '@next-template-nx/data';
 import { motion, useScroll } from 'framer-motion';
+import { ShareArticle } from '@next-template-nx/ui';
+import { useRouter } from 'next/router';
 
 interface mixedReturnedServerData {
   mdxSource: any;
@@ -26,7 +28,7 @@ interface mixedReturnedServerData {
       PublishedDate: any;
       Creator?: any;
       ArtImage: any;
-      Tags?: any;
+      Tags?: TagEntityResponseCollection;
     };
   };
 }
@@ -37,8 +39,16 @@ const PostPage = ({ mdxSource, dataPage }: mixedReturnedServerData) => {
     setIsSSR(false);
   }, []);
   const { scrollYProgress } = useScroll();
+  const router = useRouter();
+  const articleUrl = `${process.env.NEXT_PUBLIC_API_BASE_HOSTNAME}${router.asPath}`;
+
   return (
-    <div className={''}>
+    <div className={'px-0  xl:px-[10rem] 2xl:px-[14rem] relative'}>
+      <ShareArticle
+        articleLink={articleUrl}
+        articleTitle={dataPage.attributes.Description}
+        hashTags={dataPage.attributes.Tags.data.map((value) => value.attributes.TagText)}
+      />
       <motion.div className={'progress-bar'} style={{ scaleX: scrollYProgress }} />
       <h1 className={'text-2xl md:text-5xl default-police font-bold text-slate-700 text-center'}>
         {dataPage.attributes.Title}
