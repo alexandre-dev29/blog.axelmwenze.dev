@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.6.9",
-    "@nextui-org/react": "^1.0.0-beta.9",
+    "@nextui-org/react": "^1.0.0-beta.10",
     "@nrwl/next": "14.5.1",
     "core-js": "^3.6.5",
     "framer-motion": "^6.5.1",
